@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tiserio – Sign In</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" href="fav.png">
 
@@ -80,11 +80,32 @@
         </div>
         <span class="text-xl font-bold tracking-tight text-neutral-800">Tiserio</span>
     </div>
-
     <div class="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 w-full max-w-md fade-slide">
         <h1 class="text-2xl font-bold text-center mb-2">Welcome back</h1>
         <p class="text-sm text-neutral-500 text-center mb-6">Sign in to your Tiserio account</p>
 
+        <!-- Demo login info -->
+        <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3 text-sm text-neutral-700 mb-6">
+            <p class="font-semibold mb-1">🧑‍💼 Demo Login Info:</p>
+            <div class="flex flex-col gap-1">
+                <div class="flex justify-between items-center bg-white/60 rounded-md px-2 py-1">
+                    <span>Client → <b>client@tiserio.com</b> / 123456</span>
+                    <button data-email="client@tiserio.com"
+                        class="copy-btn text-indigo-600 hover:text-indigo-800 text-xs font-medium">
+                        <i data-lucide='copy' class='h-4 w-4'></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-center bg-white/60 rounded-md px-2 py-1">
+                    <span>Admin → <b>admin@tiserio.com</b> / 123456</span>
+                    <button data-email="admin@tiserio.com"
+                        class="copy-btn text-indigo-600 hover:text-indigo-800 text-xs font-medium">
+                        <i data-lucide='copy' class='h-4 w-4'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login form -->
         <form id="loginForm" class="space-y-5">
             <div>
                 <label class="block text-sm font-medium mb-1">Email</label>
@@ -97,7 +118,6 @@
                     class="w-full px-3 py-2 rounded-xl border border-neutral-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 outline-none" />
             </div>
 
-            <!-- Error message -->
             <div id="errorBox" class="error"></div>
 
             <div class="flex items-center justify-between text-sm">
@@ -119,6 +139,7 @@
         </p>
     </div>
 
+
     <script>
         lucide.createIcons();
 
@@ -127,6 +148,26 @@
         const passwordInput = document.getElementById("password");
         const errorBox = document.getElementById("errorBox");
 
+        // Copy demo email
+        document.querySelectorAll(".copy-btn").forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const email = btn.dataset.email;
+                await navigator.clipboard.writeText(email);
+
+                // Hiển thị text Copied
+                const originalHTML = btn.innerHTML;
+                btn.textContent = "Copied";
+                btn.classList.add("text-green-600");
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    lucide.createIcons(); // render lại icon
+                    btn.classList.remove("text-green-600");
+                }, 1800);
+            });
+        });
+
+        // Handle login
         form.addEventListener("submit", (e) => {
             e.preventDefault();
 

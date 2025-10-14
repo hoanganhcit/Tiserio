@@ -4,7 +4,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>LexFlow — Client & Case Workspace (Bootstrap + jQuery)</title>
+    <title>Tiserio — Firm Admin Workspace</title>
+        
+    <!-- Favicon -->
+    <link rel="icon" href="fav.png">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,6 +38,13 @@
             border-radius: 10px;
             background: linear-gradient(135deg, var(--brand-grad-start), var(--brand-grad-mid), var(--brand-grad-end));
             box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+            padding: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brand-mark img {
+            width: 100%;
         }
 
         .sidebar .nav-link {
@@ -42,7 +52,7 @@
         }
 
         .sidebar .nav-link.active {
-            background: #18d3ff;
+            background: #1d5add;
             font-weight: 600;
             border-radius: 8px;
             color: #fff;
@@ -101,7 +111,7 @@
         :root {
             --card-radius: 12px;
             --accent: linear-gradient(45deg, #00ccff, #1d5add);
-            --bg-primary: #18d3ff;
+            --bg-primary: #1d5add;
         }
 
         body {
@@ -142,13 +152,13 @@
 
         .sidebar-btn.active {
 
-            background: #18d3ff;
+            background: #1d5add;
             color: #fff;
         }
 
         .btn-primary {
-            background: #18d3ff;
-            border-color: #18d3ff;
+            background: #1d5add;
+            border-color: #1d5add;
         }
 
         .btn-primary:hover,
@@ -374,14 +384,43 @@
 
         .active>.page-link,
         .page-link.active {
-            background: #18d3ff;
-            border-color: #18d3ff;
+            background: #1d5add;
+            border-color: #1d5add;
         }
 
         .tooltip-inner {
             max-width: 600px;
             text-align: left;
             padding: 1em;
+        }
+
+        .lawyer-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #555;
+            margin-right: 8px;
+        }
+
+        .list-group-item.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .card-plain {
+            border-radius: var(--card-radius);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+            border: 1px solid #eef2ff;
+        }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -391,10 +430,12 @@
     <header class="topbar sticky-top">
         <div class="container-fluid px-3 py-2 d-flex align-items-center gap-3">
             <div class="d-flex align-items-center gap-2">
-                <div class="brand-mark"></div>
+                <div class="brand-mark">
+                    <img src="icon.png" alt="">
+                </div>
                 <div>
-                    <div style="font-weight:700; font-size:0.95rem; color:#0f172a;">LexFlow</div>
-                    <div class="tiny">Client & Case Workspace</div>
+                    <div style="font-weight:700; font-size:0.95rem; color:#0f172a;">Tiserio</div>
+                    <div class="tiny">Firm Admin Workspace</div>
                 </div>
             </div>
 
@@ -425,6 +466,7 @@
                     <div class="nav flex-column">
                         <a href="#" class="nav-link active" data-tab="dashboard"><i class="bi bi-grid me-2"></i>
                             Dashboard</a>
+                        <a href="#" class="nav-link" data-tab="lawyers"><i class="bi bi-people  me-2"></i>Lawyers</a>
                         <a href="#" class="nav-link" data-tab="clients"><i class="bi bi-people me-2"></i> Clients</a>
                         <a href="#" class="nav-link" data-tab="matters"><i class="bi bi-briefcase me-2"></i> Matters</a>
                         <a href="#" class="nav-link" data-tab="court"><i class="bi bi-bank2 me-2"></i> Court</a>
@@ -432,6 +474,11 @@
                             Calendar</a>
                         <a href="#" class="nav-link" data-tab="billing"><i class="bi bi-credit-card-2-front me-2"></i>
                             Billing</a>
+                        <a href="#" class="nav-link" data-tab="reports"><i class="bi bi-bar-chart  me-2"></i>Reports</a>
+                        <a href="#" class="nav-link" data-tab="settings"><i class="bi bi-gear  me-2"></i>Settings</a>
+                        <a href="#" class="nav-link" data-tab="auditLogs"><i class="bi bi-lock  me-2"></i>Audit Log</a>
+                        <a href="index.html" class="nav-link"><i class="bi bi-box-arrow-left me-2"></i>
+                            Logout</a>
                     </div>
                 </nav>
 
@@ -447,7 +494,20 @@
                             <div class="card card-rounded border-0 p-3">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <div class="tiny">Active Matters</div>
+                                        <div class="tiny">Active Lawyers</div>
+                                        <div style="font-weight:700; font-size:1.45rem;">4</div>
+                                        <div class="tiny">+1 this month</div>
+                                    </div>
+                                    <div class="text-end"><i class="bi bi-people"
+                                            style="font-size:1.5rem;color:#8b5cf6;"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card card-rounded border-0 p-3">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="tiny">Open Matters</div>
                                         <div style="font-weight:700; font-size:1.45rem;" id="stat-active-matters">0
                                         </div>
                                         <div class="tiny">+2 this month</div>
@@ -482,20 +542,6 @@
                                     </div>
                                     <div class="text-end"><i class="bi bi-credit-card-2-front"
                                             style="font-size:1.5rem;color:#ef4444;"></i></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-sm-6 col-xl-3">
-                            <div class="card card-rounded border-0 p-3">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="tiny">New Messages</div>
-                                        <div style="font-weight:700; font-size:1.45rem;">4</div>
-                                        <div class="tiny">Since yesterday</div>
-                                    </div>
-                                    <div class="text-end"><i class="bi bi-chat-left-text"
-                                            style="font-size:1.5rem;color:#8b5cf6;"></i></div>
                                 </div>
                             </div>
                         </div>
@@ -555,6 +601,37 @@
                 </section>
 
                 <!-- Clients Tab -->
+                <section id="tab-lawyers" class="d-none">
+                    <div class="card card-rounded border-0">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5>Lawyers</h5>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="text" id="searchLawyers" class="form-control form-control-sm"
+                                        placeholder="Search lawyers..." style="width:220px;">
+                                    <button class="btn btn-primary btn-sm" id="inviteLawyer"><i
+                                            class="bi bi-person-plus"></i> Invite Lawyer</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table class="table table-hover" id="lawyersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Practice</th>
+                                            <th>Role</th>
+                                            <th>Active</th>
+                                            <th>Permissions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="tab-clients" class="d-none">
                     <div class="card card-rounded border-0">
                         <div class="card-body">
@@ -634,6 +711,26 @@
 
                 <!-- Billing Tab (placeholder) -->
                 <section id="tab-billing" class="d-none">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <div class="p-3 card-plain bg-white">
+                                <div class="text-muted small">Trust Balance</div>
+                                <div class="kpi-value">$250,000</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 card-plain bg-white">
+                                <div class="text-muted small">Outstanding</div>
+                                <div class="kpi-value">$71,200</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 card-plain bg-white">
+                                <div class="text-muted small">Collected (30d)</div>
+                                <div class="kpi-value">$39,800</div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card card-rounded border-0 p-3">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -656,6 +753,164 @@
                                 <tbody></tbody>
                             </table>
                             <div id="invoicePagination"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Tab (placeholder) -->
+                <section id="tab-reports" class="d-none">
+                    <div class="card card-rounded border-0 p-3">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <div class="p-3 card-plain">
+                                    <div class="text-muted small">Matters Open (This Q)</div>
+                                    <div class="kpi-value" id="report-matters">0</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 card-plain">
+                                    <div class="text-muted small">Hearings (60d)</div>
+                                    <div class="kpi-value" id="report-hearings">0</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3 card-plain">
+                                    <div class="text-muted small">AR Outstanding</div>
+                                    <div class="kpi-value">$71,200</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-plain p-3">
+                            <h6>Export</h6>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-outline-secondary">Export Matters CSV</button>
+                                <button class="btn btn-outline-secondary">Export Invoices CSV</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Tab (placeholder) -->
+                <section id="tab-settings" class="d-none">
+                    <div class="card card-rounded border-0 p-3">
+                        <h5 class="mb-4">Security & Access</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="fw-semibold mb-2">SSO / SAML</h6>
+                                        <p class="text-muted small mb-3">Connect your identity provider.</p>
+                                        <div
+                                            class="d-flex justify-content-between align-items-center p-2 border rounded-2">
+                                            <div>
+                                                <div class="fw-medium">Enable SSO</div>
+                                                <div class="text-muted small">Okta, Azure AD, Google</div>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="toggleSSO" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="fw-semibold mb-2">Data Residency</h6>
+                                        <p class="text-muted small mb-3">Choose where your data is stored.</p>
+                                        <ul class="nav nav-tabs" id="residencyTabs" role="tablist">
+                                            <li class="nav-item" role="presentation"><button class="nav-link active"
+                                                    data-bs-toggle="tab" data-bs-target="#res-us" type="button"
+                                                    role="tab">US</button></li>
+                                            <li class="nav-item" role="presentation"><button class="nav-link"
+                                                    data-bs-toggle="tab" data-bs-target="#res-ca" type="button"
+                                                    role="tab">Canada</button></li>
+                                            <li class="nav-item" role="presentation"><button class="nav-link"
+                                                    data-bs-toggle="tab" data-bs-target="#res-eu" type="button"
+                                                    role="tab">EU</button></li>
+                                        </ul>
+                                        <div class="tab-content p-3">
+                                            <div class="tab-pane fade show active" id="res-us" role="tabpanel">Primary
+                                                in
+                                                us-east; failover us-west.</div>
+                                            <div class="tab-pane fade" id="res-ca" role="tabpanel">Primary in
+                                                ca-central.
+                                            </div>
+                                            <div class="tab-pane fade" id="res-eu" role="tabpanel">Primary in eu-west.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <h5>Roles & Permissions</h5>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Role</th>
+                                        <th class="text-center">Create/Edit</th>
+                                        <th class="text-center">Billing</th>
+                                        <th class="text-center">Court</th>
+                                        <th class="text-center">Manage Users</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Partner</td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Associate</td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Paralegal</td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Billing</td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                        <td class="text-center"><input type="checkbox" checked></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                        <td class="text-center"><input type="checkbox"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab Audit Log (simple) -->
+                <section id="tab-auditLogs" class="d-none">
+                    <div class="card card-rounded border-0">
+                        <div class="card-body">
+                            <h5>Audit Logs</h5>
+                            <div class="table-responsive mt-3">
+                                <table class="table table-sm" id="table-audit">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Actor</th>
+                                            <th>Action</th>
+                                            <th>Target</th>
+                                            <th>IP</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1015,6 +1270,69 @@
         </div>
     </div>
 
+    <!-- Modal: Invite Lawyer -->
+    <div class="modal fade" id="inviteLawyerModal" tabindex="-1" aria-labelledby="inviteLawyerModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="inviteLawyerModalLabel">Invite New Lawyer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="inviteLawyerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="lawyerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="lawyerEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Practice Area</label>
+                            <select class="form-select" id="lawyerPractice">
+                                <option value="Civil">Civil</option>
+                                <option value="Criminal">Criminal</option>
+                                <option value="Employment">Employment</option>
+                                <option value="Family">Family</option>
+                                <option value="Corporate">Corporate</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <input type="text" class="form-control" id="lawyerRole"
+                                placeholder="e.g. Associate, Partner" required>
+                        </div>
+                        <div class="mb-3 form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="lawyerActive" checked>
+                            <label class="form-check-label" for="lawyerActive">Active</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Permissions</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="permAdmin">
+                                <label class="form-check-label" for="permAdmin">Admin</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="permBilling">
+                                <label class="form-check-label" for="permBilling">Billing</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="permRead">
+                                <label class="form-check-label" for="permRead">Read</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" id="submitInviteLawyer">Invite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- JS libs -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -1042,6 +1360,11 @@
             { id: 1, matter: "R. v. Patel", court: "ON Superior Court", type: "Motion", date: "2025-10-06", room: "3A", status: "Scheduled", client: "Arjun Patel", clientPhone: "+1 647 555 2233", clientEmail: "arjun.patel@example.com" },
             { id: 2, matter: "Nguyen v. Atlas Logistics", court: "ON Small Claims", type: "Settlement Conf.", date: "2025-10-15", room: "2C", status: "Scheduled", client: "Lan Nguyen", clientPhone: "+1 416 555 9912", clientEmail: "lan.nguyen@example.com" },
             { id: 3, matter: "Tran v. City of Hamilton", court: "ON Superior Court", type: "Trial", date: "2025-11-18", room: "1D", status: "Confirmed", client: "Minh Tran", clientPhone: "+1 289 555 4022", clientEmail: "minh.tran@example.com" },
+        ];
+        const lawyers = [
+            { id: 1, name: "Amara Khan", email: "amara@firm.com", practice: "Civil", role: "Partner", active: true, permissions: { admin: true, billing: true, read: false } },
+            { id: 2, name: "Diego Rivera", email: "diego@firm.com", practice: "Criminal", role: "Associate", active: true, permissions: { admin: true, billing: true, read: false } },
+            { id: 3, name: "Mina Patel", email: "mina@firm.com", practice: "Employment", role: "Associate", active: false, permissions: { admin: true, billing: false, read: false } },
         ];
         let clients = [
             {
@@ -1135,6 +1458,12 @@
             { id: '1', title: 'Hearing: Lan Nguyen', start: '2025-10-12', client: 'Lan Nguyen', type: 'Hearing' },
             { id: '2', title: 'Invoice Due: Arjun Patel', start: '2025-10-18', client: 'Arjun Patel', type: 'Billing' },
             { id: '3', title: 'Mediation Meeting', start: '2025-10-20', client: 'Estate of Li Chen', type: 'Meeting' }
+        ];
+
+        let auditLogs = [
+            ["2025-09-20 10:12", "amara@firm.com", "Updated", "Matter M-2451", "192.0.2.10"],
+            ["2025-09-18 16:40", "diego@firm.com", "Created", "Invoice INV-2025-124", "192.0.2.11"],
+            ["2025-09-18 09:05", "system", "Login", "SSO Okta", "192.0.2.12"],
         ];
         // Utilities
         function updateStats(clientRef) {
@@ -1283,6 +1612,101 @@
             }
             const filtered = hearings.filter(h => h.date === selected);
             renderHearings(filtered);
+        });
+
+        // ==== Render lawyers ====
+        function renderLawyers(list = lawyers) {
+            const rows = list.map(l => {
+                const initials = l.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                return `
+      <tr>
+        <td><div class="d-flex align-items-center">
+          <div class="lawyer-avatar">${initials}</div>${l.name}
+        </div></td>
+        <td>${l.email}</td>
+        <td>${l.practice}</td>
+        <td>${l.role}</td>
+        <td>
+          <div class="form-check form-switch">
+            <input class="form-check-input lawyer-active" type="checkbox" data-id="${l.id}" ${l.active ? 'checked' : ''}>
+          </div>
+        </td>
+        <td>
+          <label class="me-2"><input type="checkbox" class="perm" data-id="${l.id}" data-type="admin" ${l.permissions.admin ? 'checked' : ''}> Admin</label>
+          <label class="me-2"><input type="checkbox" class="perm" data-id="${l.id}" data-type="billing" ${l.permissions.billing ? 'checked' : ''}> Billing</label>
+          <label><input type="checkbox" class="perm" data-id="${l.id}" data-type="read" ${l.permissions.read ? 'checked' : ''}> Read</label>
+        </td>
+      </tr>`;
+            }).join('');
+
+            $('#lawyersTable tbody').html(rows);
+        }
+        renderLawyers();
+
+        // ==== Search ====
+        $('#searchLawyers').on('input', function () {
+            const term = $(this).val().toLowerCase();
+            const filtered = lawyers.filter(l =>
+                l.name.toLowerCase().includes(term) ||
+                l.email.toLowerCase().includes(term) ||
+                l.practice.toLowerCase().includes(term)
+            );
+            renderLawyers(filtered);
+        });
+
+        // ==== Toggle active ====
+        $(document).on('change', '.lawyer-active', function () {
+            const id = $(this).data('id');
+            const lawyer = lawyers.find(l => l.id === id);
+            lawyer.active = this.checked;
+        });
+
+        // ==== Permissions ====
+        $(document).on('change', '.perm', function () {
+            const id = $(this).data('id');
+            const type = $(this).data('type');
+            const lawyer = lawyers.find(l => l.id === id);
+            lawyer.permissions[type] = this.checked;
+        });
+
+
+
+        // ==== Open modal Invite Lawyer ====
+        $('#inviteLawyer').on('click', function () {
+            const modal = new bootstrap.Modal(document.getElementById('inviteLawyerModal'));
+            $('#inviteLawyerForm')[0].reset();
+            modal.show();
+        });
+
+        // ==== Submit new lawyer ====
+        $('#submitInviteLawyer').on('click', function () {
+            const name = $('#lawyerName').val().trim();
+            const email = $('#lawyerEmail').val().trim();
+            const practice = $('#lawyerPractice').val();
+            const role = $('#lawyerRole').val().trim();
+            const active = $('#lawyerActive').is(':checked');
+            const permissions = {
+                admin: $('#permAdmin').is(':checked'),
+                billing: $('#permBilling').is(':checked'),
+                read: $('#permRead').is(':checked')
+            };
+
+            if (!name || !email || !role) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // Tạo ID mới
+            const newId = Math.max(...lawyers.map(l => l.id)) + 1;
+
+            const newLawyer = { id: newId, name, email, practice, role, active, permissions };
+            lawyers.push(newLawyer);
+            renderLawyers(lawyers);
+
+            // Ẩn modal sau khi thêm
+            const modalEl = document.getElementById('inviteLawyerModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
         });
 
         function renderClients() {
@@ -1520,6 +1944,7 @@
             renderClients();
             renderMattersList();
             renderInvoices();
+            renderAudit();
 
             // Tab switching
             $('[data-tab]').on('click', function (e) {
@@ -1971,6 +2396,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
                 popup.remove();
             });
         }
+
 
 
         function renderEmailConn() {
@@ -2822,6 +3248,11 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             $('#tab-calendar').removeClass('d-none');
             renderMasterCalendar();
         });
+
+        function renderAudit() {
+            const rows = auditLogs.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('');
+            $('#table-audit tbody').html(rows);
+        }
     </script>
 </body>
 

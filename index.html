@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xexiro – Streamline Your Law Practice</title>
+  <title>Tiserio – Streamline Your Law Practice</title>
+  <!-- Favicon -->
+  <link rel="icon" href="fav.png">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,7 +15,18 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
-    /* Smooth fade-slide animation for hero section */
+    :root {
+      --brand-grad-start: #4f46e5;
+      /* indigo-600 */
+      --brand-grad-mid: #2563eb;
+      /* blue-600 */
+      --brand-grad-end: #06b6d4;
+      /* cyan-500 */
+      --panel-bg: #ffffff;
+      --page-bg: #f8f8fc;
+      /* slate-50 */
+    }
+
     @keyframes fadeSlideUp {
       from {
         opacity: 0;
@@ -41,6 +54,18 @@
       max-height: 200px;
       padding-top: 0.5rem;
     }
+
+    .brand-mark {
+      height: 40px;
+      width: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand-grad-start), var(--brand-grad-mid), var(--brand-grad-end));
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+      padding: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 
@@ -50,8 +75,11 @@
     class="sticky top-0 z-40 backdrop-blur bg-white/70 dark:bg-neutral-950/50 border-b border-neutral-200/50 dark:border-neutral-800/50">
     <div class="mx-auto w-full max-w-7xl px-6 flex h-16 items-center justify-between">
       <div class="flex items-center gap-2">
-        <div class="h-6 w-6 rounded-xl bg-gradient-to-tr from-indigo-500 via-violet-500 to-fuchsia-500 shadow-md"></div>
-        <span class="text-xl font-bold tracking-tight">xexiro</span>
+        <div class="brand-mark">
+          <img src="icon.png" alt="">
+        </div>
+        <span onclick="window.location.href='index.html'" class="text-xl font-bold tracking-tight"
+          style="cursor: pointer;">Tiserio</span>
       </div>
 
       <nav class="hidden md:flex items-center gap-8 text-sm">
@@ -64,10 +92,11 @@
       </nav>
 
       <div class="flex items-center gap-2">
-        <button
+        <button onclick="window.location.href='login.html'"
           class="hidden sm:inline-flex border border-transparent hover:border-neutral-300 rounded-xl px-3 py-2 text-sm">Sign
           in</button>
-        <button class="rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-sm">Get started</button>
+        <button onclick="window.location.href='#pricing'"
+          class="rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-sm">Get started</button>
       </div>
     </div>
   </header>
@@ -86,7 +115,7 @@
             trial</span>
         </h1>
         <p class="text-lg text-neutral-600 dark:text-neutral-300">
-          Xexiro helps lawyers simplify their daily work: capture clients with smart intake, draft responses quickly
+          Tiserio helps lawyers simplify their daily work: capture clients with smart intake, draft responses quickly
           with AI, organize documents, schedule court appearances, manage trust funds, and issue invoices on time.
         </p>
         <div class="flex flex-col sm:flex-row gap-3">
@@ -99,6 +128,10 @@
             a demo</button>
         </div>
       </div>
+      <div class="space-y-6">
+        <img src="hero-product.png" alt="Product preview"
+          class="img-fluid rounded-2xl shadow-sm">
+      </div>
     </div>
   </section>
 
@@ -107,10 +140,10 @@
     <div class="mx-auto max-w-7xl px-6 py-20 md:py-24 text-center">
       <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Everything a lawyer needs, all in one place</h2>
       <p class="mt-3 text-neutral-600 dark:text-neutral-300">
-        From the first client contact to the final invoice—Xexiro keeps your practice running smoothly.
+        From the first client contact to the final invoice—Tiserio keeps your practice running smoothly.
       </p>
 
-      <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+      <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div class="rounded-2xl border p-6">
           <div class="mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl border">
             <i data-lucide="circle-dot"></i>
@@ -158,8 +191,8 @@
         Stay on top of clients, cases, court schedules, trust funds, and invoices at a glance.
       </p>
       <div class="mt-10 grid gap-6 md:grid-cols-2">
-        <img src="https://placehold.co/1200x560/gif" class="rounded-2xl shadow-lg" alt="Dashboard 1">
-        <img src="https://placehold.co/1200x560/gif" class="rounded-2xl shadow-lg" alt="Dashboard 2">
+        <img src="ClientDashboard.png" class="rounded-2xl shadow-lg" alt="Dashboard 1">
+        <img src="AdminPortalDashboard.png" class="rounded-2xl shadow-lg" alt="Dashboard 2">
       </div>
     </div>
   </section>
@@ -223,9 +256,9 @@
       <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-center">Frequently Asked Questions</h2>
       <div class="mt-8 max-w-3xl mx-auto space-y-4">
         <div class="accordion border rounded-xl p-4">
-          <button class="accordion-header flex justify-between w-full text-left font-semibold">What is Xexiro? <i
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">What is Tiserio? <i
               data-lucide="chevron-down"></i></button>
-          <div class="accordion-content text-sm text-neutral-600">Xexiro is a SaaS platform that helps law firms manage
+          <div class="accordion-content text-sm text-neutral-600">Tiserio is a SaaS platform that helps law firms manage
             clients, cases, billing, and scheduling in one place.</div>
         </div>
         <div class="accordion border rounded-xl p-4">
@@ -236,7 +269,7 @@
         <div class="accordion border rounded-xl p-4">
           <button class="accordion-header flex justify-between w-full text-left font-semibold">Can I manage trust funds?
             <i data-lucide="chevron-down"></i></button>
-          <div class="accordion-content text-sm text-neutral-600">Yes, Xexiro includes built-in trust accounting
+          <div class="accordion-content text-sm text-neutral-600">Yes, Tiserio includes built-in trust accounting
             features.</div>
         </div>
         <div class="accordion border rounded-xl p-4">
@@ -244,6 +277,36 @@
               data-lucide="chevron-down"></i></button>
           <div class="accordion-content text-sm text-neutral-600">Yes, AI helps draft client messages and speed up legal
             work.</div>
+        </div>
+        <div class="accordion border rounded-xl p-4">
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">Is my data secure? <i
+              data-lucide="chevron-down"></i></button>
+          <div class="accordion-content text-sm text-neutral-600">Tiserio is SOC 2 compliant, with encryption in transit and at rest.</div>
+        </div>
+        <div class="accordion border rounded-xl p-4">
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">Do you offer self-hosting? <i
+              data-lucide="chevron-down"></i></button>
+          <div class="accordion-content text-sm text-neutral-600">No, Tiserio is delivered as SaaS only.</div>
+        </div>
+        <div class="accordion border rounded-xl p-4">
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">Can I schedule court hearings? <i
+              data-lucide="chevron-down"></i></button>
+          <div class="accordion-content text-sm text-neutral-600">Yes, court and trial scheduling is built in.</div>
+        </div>
+        <div class="accordion border rounded-xl p-4">
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">Is there a client portal? <i
+              data-lucide="chevron-down"></i></button>
+          <div class="accordion-content text-sm text-neutral-600">Yes, clients can securely access updates and documents.</div>
+        </div>
+        <div class="accordion border rounded-xl p-4">
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">Do you integrate with other tools? <i
+              data-lucide="chevron-down"></i></button>
+          <div class="accordion-content text-sm text-neutral-600">Tiserio integrates with common legal CRMs and DMS platforms.</div>
+        </div>
+        <div class="accordion border rounded-xl p-4">
+          <button class="accordion-header flex justify-between w-full text-left font-semibold">How do I get started? <i
+              data-lucide="chevron-down"></i></button>
+          <div class="accordion-content text-sm text-neutral-600">Sign up for free or book a demo to see Tiserio in action.</div>
         </div>
       </div>
     </div>
@@ -253,22 +316,22 @@
   <section id="about" class="bg-neutral-50 dark:bg-neutral-900 border-t">
     <div class="mx-auto max-w-7xl px-6 py-20 md:py-24 text-center">
       <h2 class="text-3xl md:text-4xl font-bold tracking-tight">About Us</h2>
-      <p class="mt-3 text-neutral-600 dark:text-neutral-300">Xexiro is built by a passionate team with deep experience
+      <p class="mt-3 text-neutral-600 dark:text-neutral-300">Tiserio is built by a passionate team with deep experience
         in law and technology.</p>
       <div class="mt-10 grid gap-8 sm:grid-cols-3">
         <div>
           <img src="https://placehold.co/240x240/jpg" class="mx-auto rounded-full" alt="Jane Doe">
-          <h4 class="mt-3 font-semibold">Jane Doe</h4>
+          <h4 class="mt-3 font-semibold">Henry Quach</h4>
           <p class="text-sm text-neutral-500">CEO & Founder</p>
         </div>
         <div>
           <img src="https://placehold.co/240x240/jpg" class="mx-auto rounded-full" alt="John Smith">
-          <h4 class="mt-3 font-semibold">John Smith</h4>
+          <h4 class="mt-3 font-semibold">Dany Tran</h4>
           <p class="text-sm text-neutral-500">CTO</p>
         </div>
         <div>
           <img src="https://placehold.co/240x240/jpg" class="mx-auto rounded-full" alt="Emily Lee">
-          <h4 class="mt-3 font-semibold">Emily Lee</h4>
+          <h4 class="mt-3 font-semibold">Louie Thai</h4>
           <p class="text-sm text-neutral-500">Head of Product</p>
         </div>
       </div>
@@ -286,10 +349,12 @@
   <footer class="border-t">
     <div class="mx-auto w-full max-w-7xl px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <div class="h-6 w-6 rounded-xl bg-gradient-to-tr from-indigo-500 via-violet-500 to-fuchsia-500 shadow-md"></div>
-        <span class="text-xl font-bold tracking-tight">xexiro</span>
+        <div class="brand-mark">
+          <img src="icon.png" alt="">
+        </div>
+        <span class="text-xl font-bold tracking-tight">Tiserio</span>
       </div>
-      <div class="text-sm text-neutral-500">© <span id="year"></span> Xexiro Inc. All rights reserved.</div>
+      <div class="text-sm text-neutral-500">© <span id="year"></span> Tiserio Inc. All rights reserved.</div>
     </div>
   </footer>
 

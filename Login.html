@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiserio – Sign In</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="fav.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --brand-grad-start: #4f46e5;
+            /* indigo-600 */
+            --brand-grad-mid: #2563eb;
+            /* blue-600 */
+            --brand-grad-end: #06b6d4;
+            /* cyan-500 */
+            --panel-bg: #ffffff;
+            --page-bg: #f8f8fc;
+            /* slate-50 */
+        }
+
+        body {
+            background: linear-gradient(to bottom right, #eef2ff, #faf5ff);
+        }
+
+        .fade-slide {
+            animation: fadeSlideUp 0.7s ease-out both;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand-mark {
+            height: 40px;
+            width: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--brand-grad-start), var(--brand-grad-mid), var(--brand-grad-end));
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+            padding: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            margin-top: 0.75rem;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center">
+    <div class="absolute top-6 left-6 flex items-center gap-2">
+        <div class="brand-mark">
+            <img src="icon.png" alt="">
+        </div>
+        <span class="text-xl font-bold tracking-tight text-neutral-800">Tiserio</span>
+    </div>
+
+    <div class="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 w-full max-w-md fade-slide">
+        <h1 class="text-2xl font-bold text-center mb-2">Welcome back</h1>
+        <p class="text-sm text-neutral-500 text-center mb-6">Sign in to your Tiserio account</p>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium mb-1">Email</label>
+                <input id="email" type="email" required placeholder="you@lawfirm.com"
+                    class="w-full px-3 py-2 rounded-xl border border-neutral-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 outline-none" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">Password</label>
+                <input id="password" type="password" required placeholder="••••••••"
+                    class="w-full px-3 py-2 rounded-xl border border-neutral-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 outline-none" />
+            </div>
+
+            <!-- Error message -->
+            <div id="errorBox" class="error"></div>
+
+            <div class="flex items-center justify-between text-sm">
+                <a href="#" class="text-indigo-600 hover:underline">Forgot password?</a>
+                <a href="index.html" class="text-neutral-500 hover:text-indigo-600 flex items-center gap-1">
+                    <i data-lucide="arrow-left" class="h-4 w-4"></i> Back home
+                </a>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-xl flex items-center justify-center gap-2">
+                <i data-lucide="log-in" class="h-4 w-4"></i> Sign in
+            </button>
+        </form>
+
+        <p class="text-sm text-center mt-6 text-neutral-500">
+            Don’t have an account?
+            <a href="#" class="text-indigo-600 hover:underline">Sign Up</a>
+        </p>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const form = document.getElementById("loginForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const errorBox = document.getElementById("errorBox");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value.trim();
+
+            if (email === "client@tiserio.com" && password === "123456") {
+                window.location.href = "ClientAndCaseWorkspace.html";
+            } else if (email === "admin@tiserio.com" && password === "123456") {
+                window.location.href = "AdminPortalWorkspace.html";
+            } else {
+                errorBox.style.display = "block";
+                errorBox.textContent = "Email or password is incorrect.";
+            }
+        });
+    </script>
+</body>
+
+</html>

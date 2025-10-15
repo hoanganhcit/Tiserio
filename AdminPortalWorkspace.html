@@ -422,6 +422,18 @@
             font-size: 1.8rem;
             font-weight: 700;
         }
+        
+        .badge-Scheduled {
+            background: #6c757d;
+        }
+
+        .badge-Confirmed {
+            background: #198754;
+        }
+
+        .badge-Overdue {
+            background: #dc3545;
+        }
     </style>
 </head>
 
@@ -469,7 +481,8 @@
                         <a href="#" class="nav-link" data-tab="lawyers"><i class="bi bi-people  me-2"></i>Lawyers</a>
                         <a href="#" class="nav-link" data-tab="clients"><i class="bi bi-people me-2"></i> Clients</a>
                         <a href="#" class="nav-link" data-tab="matters"><i class="bi bi-briefcase me-2"></i> Matters</a>
-                        <a href="#" class="nav-link" data-tab="court"><i class="bi bi-bank2 me-2"></i> Court</a>
+                        <a href="#" class="nav-link" data-tab="court"><i class="bi bi-bank2 me-2"></i> Court &
+                            Hearings</a>
                         <a href="#" class="nav-link" data-tab="calendar"><i class="bi bi-calendar-event me-2"></i>
                             Calendar</a>
                         <a href="#" class="nav-link" data-tab="billing"><i class="bi bi-credit-card-2-front me-2"></i>
@@ -680,8 +693,16 @@
                 <section id="tab-court" class="d-none">
                     <div class="card card-rounded border-0">
                         <div class="card-body">
-                            <h5>Court & Hearings</h5>
-                            <div class="tiny">Rooms, filings, appearances</div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="mb-0">Court & Hearings</h5>
+                                    <div class="tiny">Rooms, filings, appearances</div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#addCourtHearingModal">New Court/Hearing</button>
+                                </div>
+                            </div>
                             <div class="table-responsive mt-3">
                                 <table class="table table-sm" id="courtTable">
                                     <thead>
@@ -1333,6 +1354,61 @@
         </div>
     </div>
 
+        <div class="modal fade" id="addCourtHearingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Add Court / Hearing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Matter</label>
+                        <select class="form-select form-select-sm" id="hearingMatter">
+                            <!-- render bằng JS -->
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Court</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingCourt"
+                            placeholder="e.g., ON Superior Court">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Type</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingType"
+                            placeholder="e.g., Settlement Conf.">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Date</label>
+                        <input type="date" class="form-control form-control-sm" id="hearingDate">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Room</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingRoom" placeholder="e.g., 2C">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Status</label>
+                        <select class="form-select form-select-sm" id="hearingStatus">
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Overdue">Overdue</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="saveHearingBtn">Save Hearing</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JS libs -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -1598,6 +1674,60 @@
         </tr>`);
             });
         }
+
+        // Click Add Court / Hearings
+        $('#addCourtHearingModal').on('show.bs.modal', function () {
+            const select = $('#hearingMatter');
+            select.empty();
+            matters.forEach(m => {
+                select.append(`<option value="${m.title}">${m.title} — ${m.client}</option>`);
+            });
+        });
+        $('#saveHearingBtn').on('click', function () {
+            const matterTitle = $('#hearingMatter').val();
+            const court = $('#hearingCourt').val().trim();
+            const type = $('#hearingType').val().trim();
+            const date = $('#hearingDate').val();
+            const room = $('#hearingRoom').val().trim();
+            const status = $('#hearingStatus').val();
+
+            if (!matterTitle || !court || !type || !date) {
+                alert('Please fill all required fields.');
+                return;
+            }
+
+            // Lấy matter tương ứng để auto lấy client info
+            const matterObj = matters.find(m => m.title === matterTitle);
+            const client = matterObj ? matterObj.client : "";
+            const clientInfo = clients.find(c => c.name === client);
+
+            const newHearing = {
+                id: Date.now(),
+                matter: matterTitle,
+                court,
+                type,
+                date,
+                room,
+                status,
+                client,
+                clientPhone: clientInfo?.phone || "",
+                clientEmail: clientInfo?.email || ""
+            };
+
+            // Push vào global hearings[]
+            hearings.push(newHearing);
+
+            // Re-render
+            renderHearings(); // cập nhật tab Court
+            if (typeof renderClientProfile === "function") renderClientProfile(client);
+            if (typeof renderDashboardHearings === "function") renderDashboardHearings();
+
+            // Đóng modal
+            $('#addCourtHearingModal').modal('hide');
+
+            // Reset form
+            $('#addCourtHearingModal input, #addCourtHearingModal select').val('');
+        });
 
 
         // mini calendar
@@ -2182,7 +2312,7 @@
         <div class="col-md-12">
             <ul class="nav nav-tabs small" id="clientTabNav">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#clientMatters">Matters</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientHearings">Hearings</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientHearings">Court & Hearings</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientMessages">Messages</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientDocuments">Documents</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientFinancial">Financial</a></li>
@@ -2211,7 +2341,7 @@
                         <thead><tr><th>Date</th><th>Court</th><th>Type</th><th>Status</th></tr></thead>
                         <tbody>
                         ${relatedHearings.map(h => `
-                            <tr><td>${new Date(h.date).toLocaleDateString()}</td><td>${h.court}</td><td>${h.type}</td><td>${h.status}</td></tr>
+                            <tr><td>${new Date(h.date).toLocaleDateString()}</td><td>${h.court}</td><td>${h.type}</td><td><span class="badge badge-${h.status}">${h.status}</span></td></tr>
                         `).join('') || `<tr><td colspan="4" class="tiny text-muted">No hearings</td></tr>`}
                         </tbody>
                     </table>
@@ -2898,7 +3028,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             renderClientProfile(clientName);
         });
 
-        // ========== BILLING / RECORD PAYMENT ==========
+        // ========== BILLING TAB CLIENT PROFILE ==========
 
         // render bảng billing mỗi khi vào tab
         function renderBilling(clientName) {

@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Tiserio — Client & Case Workspace</title>
-        
+
     <!-- Favicon -->
     <link rel="icon" href="fav.png">
 
@@ -43,6 +43,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .brand-mark img {
             width: 100%;
         }
@@ -393,6 +394,18 @@
             text-align: left;
             padding: 1em;
         }
+
+        .badge-Scheduled {
+            background: #6c757d;
+        }
+
+        .badge-Confirmed {
+            background: #198754;
+        }
+
+        .badge-Overdue {
+            background: #dc3545;
+        }
     </style>
 </head>
 
@@ -439,7 +452,8 @@
                             Dashboard</a>
                         <a href="#" class="nav-link" data-tab="clients"><i class="bi bi-people me-2"></i> Clients</a>
                         <a href="#" class="nav-link" data-tab="matters"><i class="bi bi-briefcase me-2"></i> Matters</a>
-                        <a href="#" class="nav-link" data-tab="court"><i class="bi bi-bank2 me-2"></i> Court</a>
+                        <a href="#" class="nav-link" data-tab="court"><i class="bi bi-bank2 me-2"></i> Court &
+                            Hearings</a>
                         <a href="#" class="nav-link" data-tab="calendar"><i class="bi bi-calendar-event me-2"></i>
                             Calendar</a>
                         <a href="#" class="nav-link" data-tab="billing"><i class="bi bi-credit-card-2-front me-2"></i>
@@ -617,8 +631,16 @@
                 <section id="tab-court" class="d-none">
                     <div class="card card-rounded border-0">
                         <div class="card-body">
-                            <h5>Court & Hearings</h5>
-                            <div class="tiny">Rooms, filings, appearances</div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="mb-0">Court & Hearings</h5>
+                                    <div class="tiny">Rooms, filings, appearances</div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#addCourtHearingModal">New Court/Hearing</button>
+                                </div>
+                            </div>
                             <div class="table-responsive mt-3">
                                 <table class="table table-sm" id="courtTable">
                                     <thead>
@@ -828,53 +850,6 @@
         </div>
     </div>
 
-    <!-- Record Payment Modal -->
-    <div class="modal fade" id="recordPaymentModal" tabindex="-1" aria-labelledby="recordPaymentModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-light">
-                    <h6 class="modal-title fw-semibold">Record Payment</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body small">
-                    <div class="mb-2">
-                        <label class="form-label tiny text-muted">Invoice ID</label>
-                        <input type="text" id="rpInvoiceId" class="form-control form-control-sm" readonly>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label tiny text-muted">Client</label>
-                        <input type="text" id="rpClient" class="form-control form-control-sm" readonly>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col">
-                            <label class="form-label tiny text-muted">Amount Due</label>
-                            <input type="text" id="rpAmountDue" class="form-control form-control-sm" readonly>
-                        </div>
-                        <div class="col">
-                            <label class="form-label tiny text-muted">Amount Paid</label>
-                            <input type="number" id="rpAmountPaid" class="form-control form-control-sm"
-                                placeholder="Enter amount">
-                        </div>
-                    </div>
-                    <div class="row g-2 mt-2">
-                        <div class="col">
-                            <label class="form-label tiny text-muted">Due Date</label>
-                            <input type="text" id="rpDueDate" class="form-control form-control-sm" readonly>
-                        </div>
-                        <div class="col">
-                            <label class="form-label tiny text-muted">Status</label>
-                            <input type="text" id="rpStatus" class="form-control form-control-sm" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button id="btnSavePayment" class="btn btn-sm btn-primary">Save Payment</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- " Add Invoice Modal" -->
     <div class="modal fade" id="addInvoiceModalClient" tabindex="-1" aria-labelledby="addInvoiceModalClientLabel"
         aria-hidden="true">
@@ -1029,6 +1004,61 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addCourtHearingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Add Court / Hearing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Matter</label>
+                        <select class="form-select form-select-sm" id="hearingMatter">
+                            <!-- render bằng JS -->
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Court</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingCourt"
+                            placeholder="e.g., ON Superior Court">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Type</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingType"
+                            placeholder="e.g., Settlement Conf.">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Date</label>
+                        <input type="date" class="form-control form-control-sm" id="hearingDate">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Room</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingRoom" placeholder="e.g., 2C">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-sm">Status</label>
+                        <select class="form-select form-select-sm" id="hearingStatus">
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Overdue">Overdue</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="saveHearingBtn">Save Hearing</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JS libs -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -1240,6 +1270,8 @@
             });
         }
 
+        // HEARINGS TAB SCRIPTS START
+
         function renderHearings(list = hearings) {
             const tbody = $('#hearingsTable tbody').empty();
             list.forEach(h => {
@@ -1284,8 +1316,62 @@
             });
         }
 
+        // Click Add Court / Hearings
+        $('#addCourtHearingModal').on('show.bs.modal', function () {
+            const select = $('#hearingMatter');
+            select.empty();
+            matters.forEach(m => {
+                select.append(`<option value="${m.title}">${m.title} — ${m.client}</option>`);
+            });
+        });
+        $('#saveHearingBtn').on('click', function () {
+            const matterTitle = $('#hearingMatter').val();
+            const court = $('#hearingCourt').val().trim();
+            const type = $('#hearingType').val().trim();
+            const date = $('#hearingDate').val();
+            const room = $('#hearingRoom').val().trim();
+            const status = $('#hearingStatus').val();
 
-        // mini calendar
+            if (!matterTitle || !court || !type || !date) {
+                alert('Please fill all required fields.');
+                return;
+            }
+
+            // Lấy matter tương ứng để auto lấy client info
+            const matterObj = matters.find(m => m.title === matterTitle);
+            const client = matterObj ? matterObj.client : "";
+            const clientInfo = clients.find(c => c.name === client);
+
+            const newHearing = {
+                id: Date.now(),
+                matter: matterTitle,
+                court,
+                type,
+                date,
+                room,
+                status,
+                client,
+                clientPhone: clientInfo?.phone || "",
+                clientEmail: clientInfo?.email || ""
+            };
+
+            // Push vào global hearings[]
+            hearings.push(newHearing);
+
+            // Re-render
+            renderHearings(); // cập nhật tab Court
+            if (typeof renderClientProfile === "function") renderClientProfile(client);
+            if (typeof renderDashboardHearings === "function") renderDashboardHearings();
+
+            // Đóng modal
+            $('#addCourtHearingModal').modal('hide');
+
+            // Reset form
+            $('#addCourtHearingModal input, #addCourtHearingModal select').val('');
+        });
+
+
+        // mini calendar dashboard
 
         $('#miniCalendar').on('change', function () {
             const selected = $(this).val();
@@ -1299,6 +1385,9 @@
             renderHearings(filtered);
         });
 
+        // HEARINGS TAB SCRIPTS END
+
+        // TAB CLIENTS 
         function renderClients() {
             const tbody = $('#clientsTable tbody').empty();
             clients.forEach(c => {
@@ -1316,6 +1405,7 @@
             });
         }
 
+        // TAB MATTERS
         function renderMattersList() {
             const container = $('#mattersListArea').empty();
             const table = $(`
@@ -1342,7 +1432,7 @@
             container.append(table);
         }
 
-        // tab Billing 
+        // TAB BILLING
         let currentInvoicePage = 1;
         const invoicesPerPage = 12;
 
@@ -1771,7 +1861,7 @@
         <div class="col-md-12">
             <ul class="nav nav-tabs small" id="clientTabNav">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#clientMatters">Matters</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientHearings">Hearings</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientHearings">Court & Hearings</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientMessages">Messages</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientDocuments">Documents</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientFinancial">Financial</a></li>
@@ -1800,7 +1890,7 @@
                         <thead><tr><th>Date</th><th>Court</th><th>Type</th><th>Status</th></tr></thead>
                         <tbody>
                         ${relatedHearings.map(h => `
-                            <tr><td>${new Date(h.date).toLocaleDateString()}</td><td>${h.court}</td><td>${h.type}</td><td>${h.status}</td></tr>
+                            <tr><td>${new Date(h.date).toLocaleDateString()}</td><td>${h.court}</td><td>${h.type}</td><td><span class="badge badge-${h.status}">${h.status}</span></td></tr>
                         `).join('') || `<tr><td colspan="4" class="tiny text-muted">No hearings</td></tr>`}
                         </tbody>
                     </table>
@@ -2703,73 +2793,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             renderBilling(clientName);
         });
 
-        // Mở modal Record Payment
-        $(document).on('click', '.btn-record-payment', function () {
-            const invId = $(this).data('id');
-            const clientName = $(this).data('client');
-            const client = clients.find(c => c.name === clientName);
-            if (!client || !client.financial) return;
-
-            const inv = client.financial.invoices.find(i => i.id === invId);
-            if (!inv) return;
-
-            // Gán dữ liệu vào modal
-            $('#rpInvoiceId').val(inv.id);
-            $('#rpClient').val(client.name);
-            $('#rpAmountDue').val(`$${inv.amount.toLocaleString()}`);
-            $('#rpAmountPaid').val('');
-            $('#rpDueDate').val(new Date(inv.due).toLocaleDateString());
-            $('#rpStatus').val(inv.status);
-
-            // Hiển thị modal
-            const modal = new bootstrap.Modal(document.getElementById('recordPaymentModal'));
-            modal.show();
-        });
-
         // Lưu thanh toán
-        $(document).on('click', '#btnSavePayment', function () {
-            const invId = $('#rpInvoiceId').val();
-            const clientName = $('#rpClient').val();
-            const amountPaid = parseFloat($('#rpAmountPaid').val() || 0);
-
-            const client = clients.find(c => c.name === clientName);
-            if (!client || !client.financial) return;
-
-            const inv = client.financial.invoices.find(i => i.id === invId);
-            if (!inv) {
-                alert('Invoice not found.');
-                return;
-            }
-
-            if (amountPaid <= 0) {
-                alert('Please enter a valid payment amount.');
-                return;
-            }
-
-            // ✅ Cập nhật dữ liệu thanh toán
-            inv.paid = (inv.paid || 0) + amountPaid;
-
-            if (inv.paid >= inv.amount) {
-                inv.status = 'Paid';
-            } else if (inv.paid > 0 && inv.paid < inv.amount) {
-                inv.status = 'Partially Paid';
-            } else {
-                inv.status = 'Unpaid';
-            }
-
-            // ✅ Cập nhật số dư outstanding của client
-            client.financial.outstanding = client.financial.invoices
-                .reduce((sum, i) => sum + Math.max(0, (i.amount - (i.paid || 0))), 0);
-
-            alert(`✅ Payment of $${amountPaid.toLocaleString()} recorded for invoice ${inv.number || inv.id}`);
-
-            // Làm mới phần Billing
-            renderBilling(client.name);
-
-            // Đóng modal
-            bootstrap.Modal.getInstance(document.getElementById('recordPaymentModal')).hide();
-        });
-
 
         function renderMasterCalendar() {
             const calendarEl = document.getElementById('calendar');

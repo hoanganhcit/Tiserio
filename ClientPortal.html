@@ -505,8 +505,9 @@
                                         <th>ID</th>
                                         <th>Title</th>
                                         <th>Client</th>
-                                        <th>Court</th>
+                                        <th>Practice</th>
                                         <th>Stage</th>
+                                        <th>Next Milestone</th>
                                         <th>Progress</th>
                                     </tr>
                                 </thead>
@@ -680,7 +681,7 @@
                     outstanding: 5000
                 },
                 matters: [
-                    { id: uid(), title: "Acme v. Northport Logistics", number: "MAT-24012", status: "Open", court: "Ontario Superior Court", stage: "Discoveries", next: "2025-11-14", percent: 40 },
+                    { id: uid(), title: "Acme v. Northport Logistics", number: "MAT-24012", status: "Open", practice: "Employment", stage: "Discoveries", next: "2025-11-14", percent: 40 },
                 ],
                 hearings: [
                     { id: uid(), matter: "Acme v. Northport Logistics", court: "ON Superior Court", type: "Motion", date: "2025-10-06", room: "3A", status: "Scheduled" },
@@ -812,8 +813,9 @@
                         <td>${m.number || m.id}</td>
                         <td>${m.title}</td>
                         <td>${currentClient.name}</td>
-                        <td>${m.court || '—'}</td>
+                        <td>${m.practice || '—'}</td>
                         <td>${m.stage || '—'}</td>
+                        <td>${m.next || '—'}</td>
                         <td style="width:200px">
                             <div class="progress" style="height:8px">
                                 <div class="progress-bar" role="progressbar" style="width:${progress}%" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>

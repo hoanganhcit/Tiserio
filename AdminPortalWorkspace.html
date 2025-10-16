@@ -1447,7 +1447,7 @@
         };
         const STAGES = ["Intake", "Discovery", "Motions", "Trial", "Closed"];
         let matters = [
-            { id: "MAT-24012", title: "Nguyen v. Atlas Logistics", client: "Lan Nguyen", practice: "Employment", stage: "Discovery", next: "Deposition prep – Oct 10", createAt: "2025-10-10", percent: 42, lawyer: "Amara Khan" },
+            { id: "MAT-24012", title: "Nguyen v. Atlas Logistics", client: "Lan Nguyen", practice: "Employment", stage: "Discovery", next: "Deposition prep – Oct 10", createAt: "2025-10-10", percent: 42, lawyer: "Henry Quach" },
             { id: "MAT-24019", title: "Estate of Chen", client: "Estate of Li Chen", practice: "Estates", stage: "Intake", next: "Collect medical files", createAt: "2025-10-12", percent: 8, lawyer: "Diego Rivera" },
             { id: "MAT-24021", title: "R. v. Patel", client: "Arjun Patel", practice: "Criminal", stage: "Motions", next: "Charter notice – due Oct 6", createAt: "2025-10-14", percent: 58, lawyer: "Amara Khan" },
             { id: "MAT-24028", title: "Tran v. City of Hamilton", client: "Minh Tran", practice: "Civil", stage: "Trial", next: "Jury selection – Nov 18", createAt: "2025-10-15", percent: 82, lawyer: "Mina Patel" },
@@ -1641,7 +1641,7 @@
                   </div>
                   <div class="text-sm tiny">${m.percent}%</div>
                 </div>
-                <div class="mt-2">Lawyer: ${m.lawyer}</div>
+                <div class="mt-2 tiny"><strong>Responsible Lawyer:</strong> ${m.lawyer}</div>
               </div>
             `);
                         list.append(card);

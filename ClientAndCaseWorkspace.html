@@ -827,29 +827,6 @@
         </div>
     </div>
 
-
-    <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="registerForm" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Register</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-2"><label class="form-label tiny">Name</label><input name="name"
-                            class="form-control form-control-sm"></div>
-                    <div class="mb-2"><label class="form-label tiny">Role</label><input name="role"
-                            class="form-control form-control-sm"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary btn-sm"
-                        data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm">Register</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- " Add Invoice Modal" -->
     <div class="modal fade" id="addInvoiceModalClient" tabindex="-1" aria-labelledby="addInvoiceModalClientLabel"
         aria-hidden="true">
@@ -1792,14 +1769,6 @@
 
                 // Reset form
                 $('#addMatterForm')[0].reset();
-            });
-
-            // Register form
-            $('#registerForm').on('submit', function (e) {
-                e.preventDefault();
-                const data = Object.fromEntries(new FormData(this).entries());
-                alert('Registered: ' + (data.name || 'Unnamed'));
-                $('#registerModal').modal('hide');
             });
 
             // notify button

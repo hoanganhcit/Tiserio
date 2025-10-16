@@ -89,7 +89,7 @@
             <p class="font-semibold mb-1">🧑‍💼 Demo Login Info:</p>
             <div class="flex flex-col gap-1">
                 <div class="flex justify-between items-center bg-white/60 rounded-md px-2 py-1">
-                    <span>Client → <b>client@tiserio.com</b> / 123456</span>
+                    <span>Attorney → <b>attorney@tiserio.com</b> / 123456</span>
                     <button data-email="client@tiserio.com"
                         class="copy-btn text-indigo-600 hover:text-indigo-800 text-xs font-medium">
                         <i data-lucide='copy' class='h-4 w-4'></i>
@@ -98,6 +98,13 @@
                 <div class="flex justify-between items-center bg-white/60 rounded-md px-2 py-1">
                     <span>Admin → <b>admin@tiserio.com</b> / 123456</span>
                     <button data-email="admin@tiserio.com"
+                        class="copy-btn text-indigo-600 hover:text-indigo-800 text-xs font-medium">
+                        <i data-lucide='copy' class='h-4 w-4'></i>
+                    </button>
+                </div>
+                <div class="flex justify-between items-center bg-white/60 rounded-md px-2 py-1">
+                    <span>Client → <b>client@tiserio.com</b> / 123456</span>
+                    <button data-email="client@tiserio.com"
                         class="copy-btn text-indigo-600 hover:text-indigo-800 text-xs font-medium">
                         <i data-lucide='copy' class='h-4 w-4'></i>
                     </button>
@@ -174,10 +181,12 @@
             const email = emailInput.value.trim().toLowerCase();
             const password = passwordInput.value.trim();
 
-            if (email === "client@tiserio.com" && password === "123456") {
+            if (email === "attorney@tiserio.com" && password === "123456") {
                 window.location.href = "ClientAndCaseWorkspace.html";
             } else if (email === "admin@tiserio.com" && password === "123456") {
                 window.location.href = "AdminPortalWorkspace.html";
+            } else if (email === "client@tiserio.com" && password === "123456") {
+                window.location.href = "ClientPortal.html";
             } else {
                 errorBox.style.display = "block";
                 errorBox.textContent = "Email or password is incorrect.";

@@ -536,7 +536,6 @@
                                             <th>Court / Type</th>
                                             <th>Room</th>
                                             <th>Status</th>
-                                            <th>Notify</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -835,14 +834,19 @@
                 return;
             }
             currentClient.hearings.forEach(h => {
+                const statusBadge =
+                        h.status === 'Confirmed'
+                            ? '<span class="badge bg-success">Confirmed</span>'
+                            : h.status === 'Overdue'
+                                ? '<span class="badge bg-danger">Overdue</span>'
+                                : '<span class="badge bg-secondary">Scheduled</span>';
                 tbody.append(`
                     <tr>
                         <td>${new Date(h.date).toLocaleDateString()}</td>
                         <td>${h.matter || h.matterTitle || '—'}</td>
                         <td>${h.court} / ${h.type}</td>
                         <td>${h.room || '—'}</td>
-                        <td>${h.status || '—'}</td>
-                        <td><button class="btn btn-sm btn-outline-primary">Notify</button></td>
+                        <td>${statusBadge}</td>
                     </tr>
                 `);
             });

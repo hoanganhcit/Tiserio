@@ -746,7 +746,8 @@
                                     <div class="position-relative d-inline-block">
                                         <img id="lawyerAvatarPreview" src="default-avatar.png"
                                             class="rounded-circle border object-fit-cover" width="100" height="100">
-                                        <button type="button" class="btn btn-sm btn-light border mx-2" id="changeAvatarBtn">
+                                        <button type="button" class="btn btn-sm btn-light border mx-2"
+                                            id="changeAvatarBtn">
                                             Change
                                         </button>
                                     </div>
@@ -2952,17 +2953,26 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             const reader = new FileReader();
             reader.onload = function (ev) {
                 const newAvatar = ev.target.result;
+
                 $('#lawyerAvatarPreview').attr('src', newAvatar);
-                lawyer.avatar = newAvatar;
+
+                lawyer.tempAvatar = newAvatar;
             };
             reader.readAsDataURL(file);
         });
 
-        // Lưu thay đổi trong Settings
+        // ✅ Khi click Save
         $('#saveLawyerBtn').on('click', function () {
             lawyer.name = $('#lawyerName').val().trim();
             lawyer.email = $('#lawyerEmail').val().trim();
             lawyer.practice = $('#lawyerPractice').val();
+
+            if (lawyer.tempAvatar) {
+                lawyer.avatar = lawyer.tempAvatar;
+                $('#userAvatar').attr('src', lawyer.avatar); 
+                delete lawyer.tempAvatar;
+            }
+
             $('#userNameDisplay').text(lawyer.name);
             alert('✅ Profile updated successfully!');
         });

@@ -435,6 +435,7 @@
         .badge-Overdue {
             background: #dc3545;
         }
+
         .dropdown-item {
             font-size: 14px;
             font-weight: 400;
@@ -639,7 +640,7 @@
                     </div>
                 </section>
 
-                <!-- Clients Tab -->
+                <!-- Lawyer Tab -->
                 <section id="tab-lawyers" class="d-none">
                     <div class="card card-rounded border-0">
                         <div class="card-body">
@@ -667,6 +668,19 @@
                                     <tbody></tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lawyer Profile Tab -->
+
+                <section id="tab-lawyer-profile" class="d-none" data-tab="lawyer-profile">
+                    <div class="p-3">
+                        <button class="btn btn-sm btn-outline-secondary mb-3 back-to-lawyers">
+                            ← Back to Lawyers
+                        </button>
+
+                        <div id="lawyerProfileContent">
                         </div>
                     </div>
                 </section>
@@ -1771,9 +1785,12 @@
                 const initials = l.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
                 return `
       <tr>
-        <td><div class="d-flex align-items-center">
-          <div class="lawyer-avatar"><img src="${l.avatar}" alt="${initials}" class=" rounded-circle overflow-hidden" style="width:100%" /></div>${l.name}
-        </div></td>
+        <td>
+            <div class="d-flex align-items-center">
+                <div class="lawyer-avatar"><img src="${l.avatar}" alt="${initials}" class=" rounded-circle overflow-hidden" style="width:100%" /></div>
+                <a href="#" class="text-decoration-none text-dark" data-lawyer="${l.name}">${l.name}</a>
+            </div>
+        </td>
         <td>${l.email}</td>
         <td>${l.practice}</td>
         <td>${l.role}</td>
@@ -1859,6 +1876,82 @@
             const modal = bootstrap.Modal.getInstance(modalEl);
             modal.hide();
         });
+
+        // Open Lawyer Profile
+
+        $(document).on('click', 'a[data-lawyer]', function (e) {
+            e.preventDefault();
+            const name = $(this).data('lawyer');
+            const lawyer = lawyers.find(l => l.name === name);
+            if (lawyer) {
+                renderLawyerProfile(lawyer);
+            }
+        });
+
+        function renderLawyerProfile(lawyer) {
+            if (!lawyer) return;
+
+            // Lấy danh sách matters mà lawyer quản lý
+            const lawyerMatters = matters.filter(m => m.lawyer === lawyer.name);
+
+            const mattersHtml = lawyerMatters.length
+                ? `<table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Client</th>
+                        <th>Practice</th>
+                        <th>Stage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${lawyerMatters.map(m => `
+                        <tr>
+                            <td>${m.id}</td>
+                            <td>${m.title}</td>
+                            <td>${m.client}</td>
+                            <td>${m.practice}</td>
+                            <td>${m.stage}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+           </table>`
+                : `<div class="text-muted small">No matters managed by this lawyer.</div>`;
+
+            const html = `
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body d-flex align-items-center gap-3">
+                <img src="${lawyer.avatar || 'default-avatar.png'}" 
+                     alt="${lawyer.name}" 
+                     class="rounded-circle" 
+                     width="72" height="72">
+                <div>
+                    <h5 class="mb-1">${lawyer.name}</h5>
+                    <div class="text-muted small">${lawyer.role || ''} • ${lawyer.practice || ''}</div>
+                    <div class="text-muted small">${lawyer.email || ''}</div>
+                    <div class="small mt-1">${lawyer.active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-secondary">Inactive</span>'}</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h6 class="fw-semibold mb-2">Matters Managed (${lawyerMatters.length})</h6>
+            ${mattersHtml}
+        </div>
+    `;
+
+            $('#lawyerProfileContent').html(html);
+            
+            $('main section').addClass('d-none');
+            $('#tab-lawyer-profile').removeClass('d-none');
+        }
+        $(document).on('click', '.back-to-lawyers', function () {
+            $('main section').addClass('d-none');
+            $('#tab-lawyers').removeClass('d-none');
+        });
+
+        // Render Clients
 
         function renderClients() {
             const tbody = $('#clientsTable tbody').empty();

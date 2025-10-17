@@ -481,7 +481,7 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         <li class="dropdown-header tiny text-muted px-3">Hello</li>
                         <li>
-                            <h6 class="dropdown-item px-3" id="userNameDisplay">Link Digital Ltd.</h6>
+                            <h6 class="dropdown-item px-3" id="officeNameDisplay">Link Digital Ltd.</h6>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
@@ -871,6 +871,33 @@
                 <!-- Settings Tab (placeholder) -->
                 <section id="tab-settings" class="d-none">
                     <div class="card card-rounded border-0 p-3">
+                        <h5 class="mb-4">Law Office Information</h5>
+                        <div class="mb-4">
+                            <div class="card-body">
+                                <form id="officeInfoForm" class="row g-3 align-items-center">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Office Name</label>
+                                        <input type="text" class="form-control form-control-sm" id="officeName"
+                                            placeholder="Enter office name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Office Logo</label>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img id="officeLogoPreview" src="default-avatar.png" alt="Office Logo"
+                                                class="rounded border"
+                                                style="width: 64px; height: 64px; object-fit: cover;">
+                                            <input type="file" class="form-control form-control-sm" id="officeLogo"
+                                                accept="image/*">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <button type="button" id="saveOfficeInfo" class="btn btn-primary btn-sm">
+                                            Save Office Info
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <h5 class="mb-4">Security & Access</h5>
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
@@ -1459,6 +1486,9 @@
             try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'CAD' }).format(Number(n)); }
             catch (e) { return '$' + Number(n).toFixed(2); }
         };
+        let officeLaw = [
+            { id: 1, name: "Link Digital Ltd.", logo: "logo-officeLaw.jpg" }
+        ];
         const STAGES = ["Intake", "Discovery", "Motions", "Trial", "Closed"];
         let matters = [
             { id: "MAT-24012", title: "Nguyen v. Atlas Logistics", client: "Lan Nguyen", practice: "Employment", stage: "Discovery", next: "Deposition prep – Oct 10", createAt: "2025-10-10", percent: 42, lawyer: "Henry Quach" },
@@ -2216,10 +2246,10 @@
                 const idx = matters.findIndex(m => m.id === id);
                 if (idx === -1) return;
 
-                const matter = matters[idx]; 
+                const matter = matters[idx];
                 showConfirmDialog(
                     `Matter "<strong>${matter.title}</strong>" — has this matter been resolved?<br>Do you want to move it to the next stage?`,
-                    function () { 
+                    function () {
                         const current = STAGES.indexOf(matter.stage);
                         const next = Math.min(current + 1, STAGES.length - 1);
                         matter.stage = STAGES[next];
@@ -2231,7 +2261,7 @@
                     }
                 );
             });
-            
+
             function showConfirmDialog(message, onConfirm) {
                 const modalId = 'confirmModal-' + Math.floor(Math.random() * 10000);
                 const html = `
@@ -3531,6 +3561,62 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             const rows = auditLogs.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join('');
             $('#table-audit tbody').html(rows);
         }
+
+        // Settings
+        $(document).ready(function () {
+            if (officeLaw.length > 0) {
+                const office = officeLaw[0];
+                $('#officeName').val(office.name || '');
+                $('#officeLogoPreview').attr('src', office.logo || 'default-office-logo.png');
+                $('#userAvatar').attr('src', office.logo || 'default-avatar.png');
+                $('#officeNameDisplay').text(office.name || '');
+            }
+        });
+
+        $('#officeLogo').on('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    $('#officeLogoPreview').attr('src', evt.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle Save Office Info
+        $('#saveOfficeInfo').on('click', function () {
+            const name = $('#officeName').val().trim();
+            const logoSrc = $('#officeLogoPreview').attr('src');
+
+            if (!name) {
+                alert('Please enter the office name.');
+                return;
+            }
+
+            if (officeLaw.length === 0) {
+                officeLaw.push({ id: 1, name, logo: logoSrc });
+            } else {
+                officeLaw[0].name = name;
+                officeLaw[0].logo = logoSrc;
+            }
+
+            // ✅ Đồng bộ ra header ngay lập tức
+            $('#userAvatar').attr('src', logoSrc);
+            $('#officeNameDisplay').text(name);
+
+            alert('✅ Office information updated successfully!');
+        });
+
+        // Load existing data when page loads
+        $(document).ready(function () {
+            const saved = localStorage.getItem('lawOfficeInfo');
+            if (saved) {
+                const info = JSON.parse(saved);
+                $('#officeName').val(info.name || '');
+                $('#officeLogoPreview').attr('src', info.logo || 'default-office-logo.png');
+            }
+        });
     </script>
 </body>
 

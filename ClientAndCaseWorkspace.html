@@ -1149,9 +1149,9 @@
         const STAGES = ["Intake", "Discovery", "Motions", "Trial", "Closed"];
         let matters = [
             { id: "MAT-24012", title: "Nguyen v. Atlas Logistics", client: "Lan Nguyen", practice: "Employment", stage: "Discovery", next: "Deposition prep – Oct 10", createAt: "2025-10-10", percent: 42, office: "McCarthy Tétrault LLP" },
-            { id: "MAT-24019", title: "Estate of Chen", client: "Estate of Li Chen", practice: "Estates", stage: "Intake", next: "Collect medical files", createAt: "2025-10-12", percent: 8, office: ""  },
-            { id: "MAT-24021", title: "R. v. Patel", client: "Arjun Patel", practice: "Criminal", stage: "Motions", next: "Charter notice – due Oct 6", createAt: "2025-10-14", percent: 58, office: "Osler, Hoskin & Harcourt LLP"  },
-            { id: "MAT-24028", title: "Tran v. City of Hamilton", client: "Minh Tran", practice: "Civil", stage: "Trial", next: "Jury selection – Nov 18", createAt: "2025-10-15", percent: 82, office: "McCarthy Tétrault LLP"  },
+            { id: "MAT-24019", title: "Estate of Chen", client: "Estate of Li Chen", practice: "Estates", stage: "Intake", next: "Collect medical files", createAt: "2025-10-12", percent: 8, office: "" },
+            { id: "MAT-24021", title: "R. v. Patel", client: "Arjun Patel", practice: "Criminal", stage: "Motions", next: "Charter notice – due Oct 6", createAt: "2025-10-14", percent: 58, office: "Osler, Hoskin & Harcourt LLP" },
+            { id: "MAT-24028", title: "Tran v. City of Hamilton", client: "Minh Tran", practice: "Civil", stage: "Trial", next: "Jury selection – Nov 18", createAt: "2025-10-15", percent: 82, office: "McCarthy Tétrault LLP" },
         ];
         let hearings = [
             { id: 1, matter: "R. v. Patel", court: "ON Superior Court", type: "Motion", date: "2025-10-06", room: "3A", status: "Scheduled", client: "Arjun Patel", clientPhone: "+1 647 555 2233", clientEmail: "arjun.patel@example.com" },
@@ -1737,14 +1737,81 @@
                 const id = $(this).data('id');
                 const idx = matters.findIndex(m => m.id === id);
                 if (idx === -1) return;
-                const current = STAGES.indexOf(matters[idx].stage);
-                const next = Math.min(current + 1, STAGES.length - 1);
-                matters[idx].stage = STAGES[next];
-                matters[idx].percent = Math.min(100, matters[idx].percent + 12);
-                renderStages($('#globalSearch').val());
-                renderMattersList();
-                updateStats();
+
+                const matter = matters[idx]; 
+                showConfirmDialog(
+                    `Matter "<strong>${matter.title}</strong>" — has this matter been resolved?<br>Do you want to move it to the next stage?`,
+                    function () { 
+                        const current = STAGES.indexOf(matter.stage);
+                        const next = Math.min(current + 1, STAGES.length - 1);
+                        matter.stage = STAGES[next];
+                        matter.percent = Math.min(100, matter.percent + 12);
+
+                        renderStages($('#globalSearch').val());
+                        renderMattersList();
+                        updateStats();
+                    }
+                );
             });
+            function showConfirmDialog(message, onConfirm) {
+                const modalId = 'confirmModal-' + Math.floor(Math.random() * 10000);
+                const html = `
+                    <div class="modal fade" id="${modalId}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Confirm Action</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">${message}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary confirm-yes">Confirm</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                `;
+                $('body').append(html);
+
+                const modalEl = document.getElementById(modalId);
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+
+                $(modalEl).on('click', '.confirm-yes', function () {
+                    modal.hide();
+                    $(modalEl).on('hidden.bs.modal', function () {
+                        $(modalEl).remove();
+                        if (onConfirm) onConfirm();
+                    });
+                });
+
+                $(modalEl).on('hidden.bs.modal', function () {
+                    $(modalEl).remove();
+                });
+            }
+
+            // Open client link (from matter / hearings)
+            $(document).on('click', '.open-client-link, .open-client-btn', function (e) {
+                e.preventDefault();
+                const clientName = $(this).data('client') || $(this).data('email');
+                // find client; if missing, show alert
+                const client = clients.find(c => c.name === clientName || c.email === clientName);
+                if (client) {
+                    // switch to client tab (we'll open Clients view and highlight)
+                    $('.sidebar .nav-link').removeClass('active');
+                    $('.sidebar .nav-link[data-tab="clients"]').addClass('active');
+                    $('main section').addClass('d-none');
+                    $('#tab-clients').removeClass('d-none');
+                    // optionally scroll to the client row
+                    $('#clientsTable tbody tr').filter(function () { return $(this).text().indexOf(client.name) !== -1; }).get(0)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    alert('Client profile not found: ' + clientName);
+                }
+            });
+
 
             // Open client link (from matter / hearings)
             $(document).on('click', '.open-client-link, .open-client-btn', function (e) {
@@ -2972,7 +3039,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
 
             if (lawyer.tempAvatar) {
                 lawyer.avatar = lawyer.tempAvatar;
-                $('#userAvatar').attr('src', lawyer.avatar); 
+                $('#userAvatar').attr('src', lawyer.avatar);
                 delete lawyer.tempAvatar;
             }
 

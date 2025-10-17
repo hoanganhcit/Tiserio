@@ -1942,7 +1942,7 @@
     `;
 
             $('#lawyerProfileContent').html(html);
-            
+
             $('main section').addClass('d-none');
             $('#tab-lawyer-profile').removeClass('d-none');
         }
@@ -2215,14 +2215,62 @@
                 const id = $(this).data('id');
                 const idx = matters.findIndex(m => m.id === id);
                 if (idx === -1) return;
-                const current = STAGES.indexOf(matters[idx].stage);
-                const next = Math.min(current + 1, STAGES.length - 1);
-                matters[idx].stage = STAGES[next];
-                matters[idx].percent = Math.min(100, matters[idx].percent + 12);
-                renderStages($('#globalSearch').val());
-                renderMattersList();
-                updateStats();
+
+                const matter = matters[idx]; 
+                showConfirmDialog(
+                    `Matter "<strong>${matter.title}</strong>" — has this matter been resolved?<br>Do you want to move it to the next stage?`,
+                    function () { 
+                        const current = STAGES.indexOf(matter.stage);
+                        const next = Math.min(current + 1, STAGES.length - 1);
+                        matter.stage = STAGES[next];
+                        matter.percent = Math.min(100, matter.percent + 12);
+
+                        renderStages($('#globalSearch').val());
+                        renderMattersList();
+                        updateStats();
+                    }
+                );
             });
+            
+            function showConfirmDialog(message, onConfirm) {
+                const modalId = 'confirmModal-' + Math.floor(Math.random() * 10000);
+                const html = `
+                    <div class="modal fade" id="${modalId}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Confirm Action</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="mb-0">${message}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary confirm-yes">Confirm</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                `;
+                $('body').append(html);
+
+                const modalEl = document.getElementById(modalId);
+                const modal = new bootstrap.Modal(modalEl);
+                modal.show();
+
+                $(modalEl).on('click', '.confirm-yes', function () {
+                    modal.hide();
+                    $(modalEl).on('hidden.bs.modal', function () {
+                        $(modalEl).remove();
+                        if (onConfirm) onConfirm();
+                    });
+                });
+
+                $(modalEl).on('hidden.bs.modal', function () {
+                    $(modalEl).remove();
+                });
+            }
 
             // Open client link (from matter / hearings)
             $(document).on('click', '.open-client-link, .open-client-btn', function (e) {

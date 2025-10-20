@@ -719,7 +719,6 @@
                             <div class="d-flex gap-2">
                                 <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#addMatterModal">New Matter</button>
-                                <button class="btn btn-sm btn-outline-secondary">Import</button>
                             </div>
                         </div>
 
@@ -1925,7 +1924,7 @@
             const lawyerMatters = matters.filter(m => m.lawyer === lawyer.name);
 
             const mattersHtml = lawyerMatters.length
-                ? `<table class="table table-sm align-middle">
+                ? `<div class="px-3 py-3 bg-white rounded shadow-sm"><table class="table table-sm align-middle">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -1946,7 +1945,7 @@
                         </tr>
                     `).join('')}
                 </tbody>
-           </table>`
+           </table></div>`
                 : `<div class="text-muted small">No matters managed by this lawyer.</div>`;
 
             const html = `

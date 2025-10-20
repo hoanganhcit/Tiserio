@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiserio – Sign Up</title>
+
+    <link rel="icon" href="fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #eef2ff, #faf5ff);
+        }
+
+        .fade-slide {
+            animation: fadeSlideUp 0.7s ease-out both;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand-mark {
+            height: 40px;
+            width: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4f46e5, #2563eb, #06b6d4);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+            padding: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            margin-top: 0.75rem;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center">
+    <div class="absolute top-6 left-6 flex items-center gap-2">
+        <div class="brand-mark">
+            <img src="icon.png" alt="">
+        </div>
+        <span class="text-xl font-bold tracking-tight text-neutral-800">Tiserio</span>
+    </div>
+
+    <div class="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 w-full max-w-md fade-slide">
+        <h1 class="text-2xl font-bold text-center mb-2">Create Your Account</h1>
+        <p class="text-sm text-neutral-500 text-center mb-6">Join Tiserio today</p>
+
+        <form id="signupForm" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium mb-1">Full Name</label>
+                <input id="fullname" type="text" required placeholder="Your full name"
+                    class="w-full px-3 py-2 rounded-xl border border-neutral-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Email</label>
+                <input id="email" type="email" required placeholder="you@lawfirm.com"
+                    class="w-full px-3 py-2 rounded-xl border border-neutral-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Password</label>
+                <input id="password" type="password" required placeholder="••••••••"
+                    class="w-full px-3 py-2 rounded-xl border border-neutral-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-2">Register as</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <label
+                        class="flex items-center justify-center border rounded-xl py-2 cursor-pointer hover:bg-indigo-50">
+                        <input type="radio" name="role" value="Admin" class="hidden peer" required>
+                        <span
+                            class="peer-checked:bg-indigo-600 peer-checked:text-white px-4 py-2 rounded-xl transition">Admin</span>
+                    </label>
+                    <label
+                        class="flex items-center justify-center border rounded-xl py-2 cursor-pointer hover:bg-indigo-50">
+                        <input type="radio" name="role" value="Attorney" class="hidden peer">
+                        <span
+                            class="peer-checked:bg-indigo-600 peer-checked:text-white px-4 py-2 rounded-xl transition">Attorney</span>
+                    </label>
+                    <label
+                        class="flex items-center justify-center border rounded-xl py-2 cursor-pointer hover:bg-indigo-50">
+                        <input type="radio" name="role" value="Client" class="hidden peer">
+                        <span
+                            class="peer-checked:bg-indigo-600 peer-checked:text-white px-4 py-2 rounded-xl transition">Client</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="errorBox" class="error"></div>
+
+            <button type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-xl flex items-center justify-center gap-2">
+                <i data-lucide="user-plus" class="h-4 w-4"></i> Sign Up
+            </button>
+        </form>
+
+        <p class="text-sm text-center mt-6 text-neutral-500">
+            Already have an account?
+            <a href="Login.html" class="text-indigo-600 hover:underline">Sign In</a>
+        </p>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const form = document.getElementById("signupForm");
+        const errorBox = document.getElementById("errorBox");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("fullname").value.trim();
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const password = document.getElementById("password").value.trim();
+            const role = document.querySelector("input[name='role']:checked")?.value;
+
+            if (!name || !email || !password || !role) {
+                errorBox.style.display = "block";
+                errorBox.textContent = "Please fill all fields and choose a role.";
+                return;
+            }
+
+            // Demo redirect
+            if (role === "Admin") window.location.href = "AdminPortalWorkspace.html";
+            else if (role === "Attorney") window.location.href = "ClientAndCaseWorkspace.html";
+            else if (role === "Client") window.location.href = "ClientPortal.html";
+        });
+    </script>
+</body>
+
+</html>

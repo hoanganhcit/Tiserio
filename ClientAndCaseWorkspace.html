@@ -1084,6 +1084,12 @@
                 </div>
 
                 <div class="modal-body">
+                    <!-- Client field (readonly when from client profile) -->
+                    <div class="mb-3" id="hearingClientField" style="display:none;">
+                        <label class="form-label text-sm">Client</label>
+                        <input type="text" class="form-control form-control-sm" id="hearingClient" readonly>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label text-sm">Matter</label>
                         <select class="form-select form-select-sm" id="hearingMatter">
@@ -1396,14 +1402,59 @@
             });
         }
 
-        // Click Add Court / Hearings
+        // Click Add Court / Hearings (from main court tab)
         $('#addCourtHearingModal').on('show.bs.modal', function () {
+            // Check if NOT opened from client profile
+            if (!$(this).data('preselected-client')) {
+                // Reset form completely
+                $('#addCourtHearingModal input, #addCourtHearingModal select').val('');
+                
+                // Hide client field for general add
+                $('#hearingClientField').hide();
+                $('#hearingClient').val('');
+                
+                const select = $('#hearingMatter');
+                select.empty();
+                matters.forEach(m => {
+                    select.append(`<option value="${m.title}">${m.title} — ${m.client}</option>`);
+                });
+            }
+        });
+
+        // Click Add Court/Hearing from Client Profile
+        $(document).on('click', '.btn-add-client-hearing', function () {
+            const clientName = $(this).data('client');
+            const client = clients.find(c => c.name === clientName);
+            
+            if (!client) {
+                alert('Client not found');
+                return;
+            }
+
+            // Show and populate client field (readonly)
+            $('#hearingClientField').show();
+            $('#hearingClient').val(client.name);
+
+            // Populate matters dropdown with only this client's matters
             const select = $('#hearingMatter');
             select.empty();
-            matters.forEach(m => {
-                select.append(`<option value="${m.title}">${m.title} — ${m.client}</option>`);
-            });
+            const clientMatters = matters.filter(m => m.client === client.name);
+            
+            if (clientMatters.length === 0) {
+                select.append(`<option value="">No matters found for ${client.name}</option>`);
+            } else {
+                clientMatters.forEach(m => {
+                    select.append(`<option value="${m.title}">${m.title}</option>`);
+                });
+            }
+
+            // Store the client name for later use
+            $('#addCourtHearingModal').data('preselected-client', client.name);
+
+            // Show the modal
+            $('#addCourtHearingModal').modal('show');
         });
+
         $('#saveHearingBtn').on('click', function () {
             const matterTitle = $('#hearingMatter').val();
             const court = $('#hearingCourt').val().trim();
@@ -1440,14 +1491,39 @@
 
             // Re-render
             renderHearings(); // cập nhật tab Court
-            if (typeof renderClientProfile === "function") renderClientProfile(client);
+
+            // Check if opened from client profile
+            const preselectedClient = $('#addCourtHearingModal').data('preselected-client');
+            if (preselectedClient && typeof renderClientProfile === "function") {
+                // Re-render client profile
+                renderClientProfile(preselectedClient);
+                
+                // Switch to Court & Hearings tab in client profile
+                setTimeout(() => {
+                    $('#clientTabNav a[href="#clientHearings"]').tab('show');
+                }, 100);
+            }
+
             if (typeof renderDashboardHearings === "function") renderDashboardHearings();
 
             // Đóng modal
             $('#addCourtHearingModal').modal('hide');
 
-            // Reset form
+            // Reset form và clear all data
+            resetCourtHearingModal();
+        });
+
+        // Function to reset modal completely
+        function resetCourtHearingModal() {
             $('#addCourtHearingModal input, #addCourtHearingModal select').val('');
+            $('#addCourtHearingModal').removeData('preselected-client');
+            $('#hearingClientField').hide();
+            $('#hearingClient').val('');
+        }
+
+        // Reset khi đóng modal bằng nút Cancel hoặc X
+        $('#addCourtHearingModal').on('hidden.bs.modal', function () {
+            resetCourtHearingModal();
         });
 
 
@@ -2025,6 +2101,12 @@
 
                 <!-- Hearings -->
                 <div class="tab-pane fade" id="clientHearings">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Court & Hearings</h6>
+                        <button class="btn btn-sm btn-primary btn-add-client-hearing" data-client="${client.name}">
+                            <i class="bi bi-plus-lg me-1"></i> Add Court/Hearing
+                        </button>
+                    </div>
                     <div class="table-responsive">
                     <table class="table table-sm">
                         <thead><tr><th>Date</th><th>Court</th><th>Type</th><th>Status</th></tr></thead>

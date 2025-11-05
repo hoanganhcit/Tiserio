@@ -2255,6 +2255,7 @@
                 const popup = $(`
           <div class="reply-popup shadow rounded bg-white border p-3 position-absolute" 
                style="z-index:9999; width:100%;max-width:600px">
+               <button class="btn-close btn-none float-end"></button>
             <div><strong>Title:</strong> ${msg.title || 'Hearing reschedule'}</div>
             <div class="mt-1"><strong>Content:</strong> ${msg.content || 'Confirm client’s availability...'}</div>
             <div class="mt-2"><strong>Respond:</strong></div>
@@ -2277,7 +2278,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
                     left: offset.left - 50
                 });
 
-                $(document).one('click', function () {
+                $('.btn-close').one('click', function () {
                     popup.remove();
                 });
             });

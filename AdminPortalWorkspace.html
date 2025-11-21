@@ -162,11 +162,11 @@
             border-color: #1d5add;
         }
 
-        .btn-primary:hover,
+        /* .btn-primary:hover,
         .btn-primary:focus {
             background: #11b6db;
             border-color: #11b6db;
-        }
+        } */
 
         .progress-bar {
             background-color: var(--bg-primary);
@@ -2517,6 +2517,11 @@
 
         let currentClient = null;
         let emailConn = JSON.parse(localStorage.getItem('client.emailConn') || '{"gmail":false,"outlook":false}');
+        
+        // Initialize counselMessages for all clients if not exists
+        clients.forEach(c => {
+            if (!c.counselMessages) c.counselMessages = [];
+        });
 
         // ========== CLIENT PROFILE ==========
         function renderClientProfile(clientName) {
@@ -2611,6 +2616,10 @@
                 <div class="tab-pane fade" id="clientMessages">
                     <div class="card card-round mb-3">
                         <div class="card-body">
+                            <div class="d-flex gap-2 align-items-center mb-4">
+                                <button id="btnMsgClient" class="btn btn-sm btn-primary msg-type-tab" data-msg-type="client"><i class="bi bi-chat-left-dots"></i> Client</button>
+                                <button id="btnMsgCounsel" class="btn btn-sm btn-outline-secondary msg-type-tab" data-msg-type="counsel"><i class="bi bi-envelope-at"></i> Opposing Counsel</button>
+                            </div>
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h6 class="mb-0">Secure Messages</h6>
                                 <div class="d-flex gap-2 align-items-center">
@@ -2683,11 +2692,19 @@
         });
 
         // ========== MESSAGE FUNCTIONS ==========
+        let activeMsgType = 'client'; // 'client' or 'counsel'
+
         function renderMessages() {
             if (!currentClient) return;
 
             const filter = $('#msgFilter').val() || 'all';
-            const msgs = currentClient.messages || [];
+            
+            // Get messages based on active type
+            const allMsgs = activeMsgType === 'client' 
+                ? (currentClient.messages || []) 
+                : (currentClient.counselMessages || []);
+            
+            const msgs = allMsgs;
 
             const filtered = msgs.filter(m => {
                 if (filter === 'portal') return !m.from.includes('Email');
@@ -2795,6 +2812,19 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
         }
 
         // ========== MESSAGE ACTIONS ==========
+        // Switch between Client and Opposing Counsel messages
+        $(document).on('click', '.msg-type-tab', function() {
+            const msgType = $(this).data('msg-type');
+            activeMsgType = msgType;
+            
+            // Update button styles
+            $('.msg-type-tab').removeClass('btn-primary').addClass('btn-outline-secondary');
+            $(this).removeClass('btn-outline-secondary').addClass('btn-primary');
+            
+            // Re-render messages
+            renderMessages();
+        });
+
         $(document).on('change', '#msgFilter', renderMessages);
 
         $(document).on('click', '#sendMsgBtn', function () {
@@ -2818,8 +2848,14 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
                 at: new Date().toISOString()
             };
 
-            currentClient.messages = currentClient.messages || [];
-            currentClient.messages.push(msg);
+            // Save to correct message array based on active type
+            if (activeMsgType === 'client') {
+                currentClient.messages = currentClient.messages || [];
+                currentClient.messages.push(msg);
+            } else {
+                currentClient.counselMessages = currentClient.counselMessages || [];
+                currentClient.counselMessages.push(msg);
+            }
 
             $('#newMsgInput').val('');
             renderMessages();
@@ -2880,7 +2916,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
                     "Notice of Motion / Motion Record",
                     "Affidavit(s)",
                     "Memorandum of Law / Factum",
-                    "Consent Orders / Draft Orders",
+                    "Court Orders",
                     "Judgment / Order"
                 ],
                 "Discovery & Evidence": [
@@ -3096,10 +3132,13 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             let idx = 0;
             const html = Object.entries(documentStructure).map(([folder, subs]) => {
                 const folderId = 'folder' + (++idx);
+                const folderVisible = currentClient?.folderVisibility?.[folder] !== false;
+                
                 const subsHtml = Object.entries(subs).map(([sub, files]) => {
-                    // tạo id an toàn cho selector (loại bỏ ký tự đặc biệt)
                     const safeSub = sub.replace(/[^a-zA-Z0-9_-]/g, '_');
                     const subId = folderId + '-' + safeSub + '-' + Math.floor(Math.random() * 10000);
+                    const subVisible = currentClient?.subfolderVisibility?.[folder]?.[sub] !== false;
+                    
                     const fileItems = (files || []).map(f => `
         <li class="list-group-item d-flex justify-content-between align-items-center small">
           <span><i class="bi bi-file-earmark-text me-2 text-secondary"></i>${f}</span>
@@ -3111,11 +3150,19 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
       `).join('');
                     return `
         <div class="accordion-item border-0">
-          <h2 class="accordion-header" id="heading-${subId}">
-            <button class="accordion-button collapsed small bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${subId}" aria-controls="collapse-${subId}">
-              <i class="bi bi-folder me-2 text-warning"></i>${sub}
-            </button>
-          </h2>
+          <div class="accordion-header" id="heading-${subId}">
+            <div class="d-flex align-items-center bg-light">
+              <button class="accordion-button collapsed small bg-light flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${subId}" aria-controls="collapse-${subId}" style="border:none;">
+                <i class="bi bi-folder me-2 text-warning"></i>${sub}
+              </button>
+              <div class="form-check form-switch d-flex gap-2 align-items-center me-3">
+                <input type="checkbox" class="form-check-input subfolder-visibility-toggle" 
+                       data-folder="${folder}" data-subfolder="${sub}" 
+                       ${subVisible ? 'checked' : ''} 
+                       role="switch">
+              </div>
+            </div>
+          </div>
           <div id="collapse-${subId}" class="accordion-collapse collapse" aria-labelledby="heading-${subId}">
             <div class="accordion-body p-0">
               <ul class="list-group list-group-flush">${fileItems || '<li class="list-group-item tiny text-muted">No files yet</li>'}</ul>
@@ -3126,11 +3173,20 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
                 }).join('');
                 return `
       <div class="accordion-item">
-        <h2 class="accordion-header" id="heading${idx}">
-          <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${idx}" aria-controls="collapse${idx}">
-            <i class="bi bi-folder-fill text-warning me-2"></i>${folder}
-          </button>
-        </h2>
+        <div class="accordion-header" id="heading${idx}">
+          <div class="d-flex align-items-center">
+            <button class="accordion-button collapsed fw-semibold flex-grow-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${idx}" aria-controls="collapse${idx}" style="border:none;">
+              <i class="bi bi-folder-fill text-warning me-2"></i>${folder}
+            </button>
+            <div class="form-check form-switch d-flex gap-2 align-items-center me-3">
+              <input type="checkbox" class="form-check-input folder-visibility-toggle" 
+                     data-folder="${folder}" 
+                     ${folderVisible ? 'checked' : ''} 
+                     role="switch">
+              <label class="form-check-label text-sm text-muted">Show/Hide</label>
+            </div>
+          </div>
+        </div>
         <div id="collapse${idx}" class="accordion-collapse collapse" aria-labelledby="heading${idx}">
           <div class="accordion-body p-0">
             <div class="accordion accordion-flush">${subsHtml}</div>
@@ -3253,6 +3309,28 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
 
                 renderDocuments();
             }
+        });
+
+        // Toggle folder visibility
+        $(document).on('change', '.folder-visibility-toggle', function (e) {
+            e.stopPropagation();
+            const folder = $(this).data('folder');
+            const isVisible = $(this).is(':checked');
+            
+            if (!currentClient.folderVisibility) currentClient.folderVisibility = {};
+            currentClient.folderVisibility[folder] = isVisible;
+        });
+
+        // Toggle subfolder visibility
+        $(document).on('change', '.subfolder-visibility-toggle', function (e) {
+            e.stopPropagation();
+            const folder = $(this).data('folder');
+            const subfolder = $(this).data('subfolder');
+            const isVisible = $(this).is(':checked');
+            
+            if (!currentClient.subfolderVisibility) currentClient.subfolderVisibility = {};
+            if (!currentClient.subfolderVisibility[folder]) currentClient.subfolderVisibility[folder] = {};
+            currentClient.subfolderVisibility[folder][subfolder] = isVisible;
         });
 
         // handle send message

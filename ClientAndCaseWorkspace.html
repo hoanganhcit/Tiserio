@@ -423,6 +423,184 @@
             font-size: 14px;
             font-weight: 400;
         }
+
+        /* AI Console Styles */
+        .ai-console-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .ai-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .mode-switch {
+            display: inline-flex;
+            padding: 0.15rem;
+            border-radius: 999px;
+            background: #e5e7eb;
+            font-size: 0.75rem;
+        }
+
+        .mode-btn {
+            border-radius: 999px;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .mode-btn.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-disclaimer {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .template-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+
+        .template-pill {
+            border-radius: 999px;
+            border: 1px solid #e2e8f0;
+            padding: 0.25rem 0.75rem;
+            background: #f8fafc;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-pill:hover {
+            background: #ffffff;
+            border-color: #1d5add;
+        }
+
+        .ai-chat {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            font-size: 0.875rem;
+            background: #ffffff;
+        }
+
+        .msg-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .msg-row.user {
+            justify-content: flex-end;
+        }
+
+        .msg-bubble {
+            max-width: 70%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        .msg-user {
+            background: #1d5add;
+            color: #ffffff;
+            border-bottom-right-radius: 2px;
+        }
+
+        .msg-ai {
+            background: #f8fafc;
+            color: #0f172a;
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-loading {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .ai-input-section {
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+        }
+
+        .ai-input-inner {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .ai-textarea {
+            flex: 1;
+            min-height: 60px;
+            max-height: 120px;
+            font-size: 0.875rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            resize: vertical;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .ai-textarea:focus {
+            border-color: #1d5add;
+            box-shadow: 0 0 0 3px rgba(29, 90, 221, 0.1);
+        }
+
+        .ai-hint {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+        .mini-card {
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 0.6rem 0.7rem;
+        }
+
+        .mini-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .mini-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .mini-badges {
+            display: flex;
+            gap: 0.2rem;
+            margin-top: 0.25rem;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 
@@ -1408,11 +1586,11 @@
             if (!$(this).data('preselected-client')) {
                 // Reset form completely
                 $('#addCourtHearingModal input, #addCourtHearingModal select').val('');
-                
+
                 // Hide client field for general add
                 $('#hearingClientField').hide();
                 $('#hearingClient').val('');
-                
+
                 const select = $('#hearingMatter');
                 select.empty();
                 matters.forEach(m => {
@@ -1425,7 +1603,7 @@
         $(document).on('click', '.btn-add-client-hearing', function () {
             const clientName = $(this).data('client');
             const client = clients.find(c => c.name === clientName);
-            
+
             if (!client) {
                 alert('Client not found');
                 return;
@@ -1439,7 +1617,7 @@
             const select = $('#hearingMatter');
             select.empty();
             const clientMatters = matters.filter(m => m.client === client.name);
-            
+
             if (clientMatters.length === 0) {
                 select.append(`<option value="">No matters found for ${client.name}</option>`);
             } else {
@@ -1497,7 +1675,7 @@
             if (preselectedClient && typeof renderClientProfile === "function") {
                 // Re-render client profile
                 renderClientProfile(preselectedClient);
-                
+
                 // Switch to Court & Hearings tab in client profile
                 setTimeout(() => {
                     $('#clientTabNav a[href="#clientHearings"]').tab('show');
@@ -1814,10 +1992,10 @@
                 const idx = matters.findIndex(m => m.id === id);
                 if (idx === -1) return;
 
-                const matter = matters[idx]; 
+                const matter = matters[idx];
                 showConfirmDialog(
                     `Matter "<strong>${matter.title}</strong>" — has this matter been resolved?<br>Do you want to move it to the next stage?`,
-                    function () { 
+                    function () {
                         const current = STAGES.indexOf(matter.stage);
                         const next = Math.min(current + 1, STAGES.length - 1);
                         matter.stage = STAGES[next];
@@ -2029,7 +2207,7 @@
 
         let currentClient = null;
         let emailConn = JSON.parse(localStorage.getItem('client.emailConn') || '{"gmail":false,"outlook":false}');
-        
+
         // Initialize counselMessages for all clients if not exists
         clients.forEach(c => {
             if (!c.counselMessages) c.counselMessages = [];
@@ -2083,24 +2261,31 @@
             <ul class="nav nav-tabs small" id="clientTabNav">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#clientMatters">Matters</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientHearings">Court & Hearings</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientMessages">Messages</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientDocuments">Documents</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#clientFinancial">Financial</a></li>
             </ul>
 
             <div class="tab-content mt-3">
                 <!-- Matters -->
                 <div class="tab-pane fade show active" id="clientMatters">
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead><tr><th>ID</th><th>Title</th><th>Stage</th><th>Progress</th></tr></thead>
-                            <tbody>
-                            ${relatedMatters.map(m => `
-                                <tr><td>${m.id}</td><td>${m.title}</td><td>${m.stage}</td>
-                                <td style="vertical-align:middle"><div class="progress" style="height:8px;"><div class="progress-bar" style="width:${m.percent}%"></div></div></td></tr>
-                            `).join('') || `<tr><td colspan="4" class="tiny text-muted">No matters yet</td></tr>`}
-                            </tbody>
-                        </table>
+                    <div id="mattersList">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead><tr><th>ID</th><th>Title</th><th>Stage</th><th>Progress</th></tr></thead>
+                                <tbody>
+                                ${relatedMatters.map(m => `
+                                    <tr>
+                                        <td>${m.id}</td>
+                                        <td><a href="#" class="matter-title-link" data-matter-id="${m.id}" style="color: #1d5add; text-decoration: none;">${m.title}</a></td>
+                                        <td>${m.stage}</td>
+                                        <td style="vertical-align:middle"><div class="progress" style="height:8px;"><div class="progress-bar" style="width:${m.percent}%"></div></div></td>
+                                    </tr>
+                                `).join('') || `<tr><td colspan="4" class="tiny text-muted">No matters yet</td></tr>`}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="matterDetail" style="display: none;">
+                        <!-- Matter detail content will be inserted here -->
                     </div>
                 </div>
 
@@ -2124,58 +2309,6 @@
                     </div>
                 </div>
 
-                <!-- Messages -->
-                <div class="tab-pane fade" id="clientMessages">
-                    <div class="card card-round mb-3">
-                        <div class="card-body">
-                            <div class="d-flex gap-2 align-items-center mb-4">
-                                <button id="btnMsgClient" class="btn btn-sm btn-primary msg-type-tab" data-msg-type="client"><i class="bi bi-chat-left-dots"></i> Client</button>
-                                <button id="btnMsgCounsel" class="btn btn-sm btn-outline-secondary msg-type-tab" data-msg-type="counsel"><i class="bi bi-envelope-at"></i> Opposing Counsel</button>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="mb-0">Secure Messages</h6>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <select id="msgFilter" class="form-select form-select-sm">
-                                        <option value="all">All (Portal + Email)</option>
-                                        <option value="portal">Portal Only</option>
-                                        <option value="email">Email Only</option>
-                                    </select>
-                                    <button id="exportMsgs" class="btn btn-outline-secondary btn-sm">Export</button>
-                                </div>
-                            </div>
-
-                            <div class="mb-2">
-                                <span id="gmailStatus" class="rounded-pill-xs bg-light small px-2 py-2 me-1">Gmail Not Connected</span>
-                                <span id="outlookStatus" class="rounded-pill-xs bg-light small px-2 py-2 me-1">Outlook Not Connected</span>
-                                <button id="connectGmail" class="btn btn-sm btn-outline-danger">Connect Gmail</button>
-                                <button id="connectOutlook" class="btn btn-sm btn-outline-info">Connect Outlook</button>
-                                <button id="importEmails" class="btn btn-sm btn-outline-secondary">Import recent emails (demo)</button>
-                            </div>
-
-                            <div class="border rounded p-3 bg-white mb-2" style="height:250px; overflow:auto" id="msgContainer"></div>
-
-                            <div class="d-flex gap-2">
-                                <input id="newMsgInput" class="form-control" placeholder="Write a message to your lawyer…" />
-                                <button id="sendMsgBtn" class="btn btn-primary"><i class="bi bi-chat-dots me-1"></i>Send</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Documents -->
-                <div class="tab-pane fade" id="clientDocuments">
-                    <div class="d-flex flex-column mb-3">
-                        <h6 class="mb-2">Client Documents</h6>
-                        <div class="d-flex gap-2">
-                            <select id="folderSelect" class="form-select form-select-sm" style="width:auto;"></select>
-                            <select id="subfolderSelect" class="form-select form-select-sm" style="width:auto;"></select>
-                            <input type="file" id="uploadFile" class="form-control form-control-sm" style="width:auto;">
-                            <button id="btnUploadDoc" class="btn btn-sm btn-primary">Upload</button>
-                        </div>
-                    </div>
-                    <div id="docFolders" class="accordion accordion-border accordion-flush"></div>
-                </div>
-
                 <!-- Billing -->
                 <div class="tab-pane fade" id="clientFinancial">
                     <div class="table-responsive">
@@ -2190,12 +2323,329 @@
     </div>`;
 
             $('#clientProfileBody').html(html);
-            renderDocuments();
-            renderMessages(); // ✅ render tin nhắn ban đầu
+            renderBilling(client.name);
             $('#tab-client-profile').removeClass('d-none');
             $('main section').not('#tab-client-profile').addClass('d-none');
             $('.sidebar .nav-link').removeClass('active');
         }
+
+        // ========== MATTER DETAIL VIEW ==========
+        let currentMatter = null;
+
+        // Event handler for clicking matter title
+        $(document).on('click', '.matter-title-link', function (e) {
+            e.preventDefault();
+            const matterId = $(this).data('matter-id');
+            showMatterDetail(matterId);
+        });
+
+        function showMatterDetail(matterId) {
+            const matter = matters.find(m => m.id === matterId);
+            if (!matter) {
+                alert('Matter not found');
+                return;
+            }
+
+            currentMatter = matter;
+
+            // Hide matters list and client tabs, show detail view
+            $('#mattersList').hide();
+            $('#clientTabNav').hide();
+
+            // Build matter detail HTML
+            const detailHtml = `
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-outline-secondary" id="backToMattersList">
+                        <i class="bi bi-arrow-left"></i> Back to Matters
+                    </button>
+                </div>
+                
+                <div class="card card-rounded mb-3">
+                    <div class="card-body">
+                        <h5>${matter.title}</h5>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <small class="text-muted">Matter ID</small>
+                                <div>${matter.id}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Practice Area</small>
+                                <div>${matter.practice || '—'}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Stage</small>
+                                <div><span class="badge bg-primary">${matter.stage}</span></div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">Progress</small>
+                                <div class="progress mt-1" style="height:12px;">
+                                    <div class="progress-bar" style="width:${matter.percent}%">${matter.percent}%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <small class="text-muted">Next Action</small>
+                                <div>${matter.next || '—'}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">Created</small>
+                                <div>${matter.createAt ? new Date(matter.createAt).toLocaleDateString() : '—'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs for Messages and Documents -->
+                <ul class="nav nav-tabs small" id="matterDetailTabs">
+                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#matterMessages">Messages</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#matterDocuments">Documents</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#matterAI">Tiserio AI <span class="badge bg-info ">Pro</span></a></li>
+                </ul>
+
+                <div class="tab-content mt-3">
+                    <!-- Messages Tab -->
+                    <div class="tab-pane fade show active" id="matterMessages">
+                        <div class="card card-round mb-3">
+                            <div class="card-body">
+                                <div class="d-flex gap-2 align-items-center mb-4">
+                                    <button id="btnMsgClient" class="btn btn-sm btn-primary msg-type-tab" data-msg-type="client"><i class="bi bi-chat-left-dots"></i> Client</button>
+                                    <button id="btnMsgCounsel" class="btn btn-sm btn-outline-secondary msg-type-tab" data-msg-type="counsel"><i class="bi bi-envelope-at"></i> Opposing Counsel</button>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Secure Messages</h6>
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <select id="msgFilter" class="form-select form-select-sm">
+                                            <option value="all">All (Portal + Email)</option>
+                                            <option value="portal">Portal Only</option>
+                                            <option value="email">Email Only</option>
+                                        </select>
+                                        <button id="exportMsgs" class="btn btn-outline-secondary btn-sm">Export</button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <span id="gmailStatus" class="rounded-pill-xs bg-light small px-2 py-2 me-1">Gmail Not Connected</span>
+                                    <span id="outlookStatus" class="rounded-pill-xs bg-light small px-2 py-2 me-1">Outlook Not Connected</span>
+                                    <button id="connectGmail" class="btn btn-sm btn-outline-danger">Connect Gmail</button>
+                                    <button id="connectOutlook" class="btn btn-sm btn-outline-info">Connect Outlook</button>
+                                    <button id="importEmails" class="btn btn-sm btn-outline-secondary">Import recent emails (demo)</button>
+                                </div>
+
+                                <div class="border rounded p-3 bg-white mb-2" style="height:250px; overflow:auto" id="msgContainer"></div>
+
+                                <div class="d-flex gap-2">
+                                    <input id="newMsgInput" class="form-control" placeholder="Write a message to your lawyer…" />
+                                    <button id="sendMsgBtn" class="btn btn-primary"><i class="bi bi-chat-dots me-1"></i>Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documents Tab -->
+                    <div class="tab-pane fade" id="matterDocuments">
+                        <div class="d-flex flex-column mb-3">
+                            <h6 class="mb-2">Client Documents</h6>
+                            <div class="d-flex gap-2">
+                                <select id="folderSelect" class="form-select form-select-sm" style="width:auto;"></select>
+                                <select id="subfolderSelect" class="form-select form-select-sm" style="width:auto;"></select>
+                                <input type="file" id="uploadFile" class="form-control form-control-sm" style="width:auto;">
+                                <button id="btnUploadDoc" class="btn btn-sm btn-primary">Upload</button>
+                            </div>
+                        </div>
+                        <div id="docFolders" class="accordion accordion-border accordion-flush"></div>
+                    </div>
+
+                    <!-- AI Tab -->
+                    <div class="tab-pane fade" id="matterAI">
+                        <div class="ai-console-wrapper">
+                            <div class="ai-top">
+                                <div class="mode-switch">
+                                    <button class="mode-btn active" data-mode="analyze">Analyze Facts</button>
+                                    <button class="mode-btn" data-mode="strategy">Strategy</button>
+                                    <button class="mode-btn" data-mode="court">Court Planning</button>
+                                </div>
+                                <div class="ai-disclaimer">
+                                    AI drafts are suggestions only – review before relying on them.
+                                </div>
+                            </div>
+
+                            <div class="template-row" id="templateRow">
+                                <!-- Filled by JS -->
+                            </div>
+
+                            <div id="aiChat" class="ai-chat">
+                                <!-- Messages inserted by JS -->
+                            </div>
+
+                            <div class="ai-input-section">
+                                <div class="ai-input-inner">
+                                    <textarea
+                                        id="aiInput"
+                                        class="ai-textarea"
+                                        placeholder="Ask AI to analyze facts, draft strategy, or plan court steps…"
+                                    ></textarea>
+                                    <button id="sendAIBtn" class="btn btn-primary">
+                                        Generate
+                                    </button>
+                                </div>
+                                <div class="ai-hint">
+                                    Press Enter to send, Shift+Enter for a new line.
+                                </div>
+                            </div>
+                        </div>
+                        <section class="mini-card mt-4">
+                            <div class="mini-label">Strategy snapshot</div>
+                            <div class="mini-title font-weight-bold">Theory of the Matters</div>
+                                <p >
+                                    AI-generated themes and framing for liability and damages will appear here.
+                                    Use this as a working draft and refine with your own judgment.
+                                </p>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-primary">Export as Word</button>
+                                <button class="btn btn-sm btn-secondary">Mark lawyer-reviewed</button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            `;
+
+            $('#matterDetail').html(detailHtml).show();
+
+            // Re-render messages and documents for the matter detail view
+            renderMessages();
+            renderDocuments();
+            renderEmailConn();
+        }
+
+        // Event handler for back button
+        $(document).on('click', '#backToMattersList', function () {
+            $('#matterDetail').hide();
+            $('#mattersList').show();
+            $('#clientTabNav').show();
+            currentMatter = null;
+        });
+
+        // ========== AI CONSOLE FUNCTIONS ==========
+        const MODE_TEMPLATES = {
+            analyze: [
+                "Issue-spot from all facts",
+                "Highlight missing facts",
+                "Analyze strengths & weaknesses"
+            ],
+            strategy: [
+                "Propose theory of the case",
+                "Draft themes for opening",
+                "Anticipate defense arguments"
+            ],
+            court: [
+                "Generate motion roadmap",
+                "Plan witness order",
+                "Draft pre-trial checklist"
+            ]
+        };
+
+        let currentAIMode = "analyze";
+
+        function renderAITemplates() {
+            const templateRow = $('#templateRow');
+            templateRow.empty();
+            MODE_TEMPLATES[currentAIMode].forEach(label => {
+                const btn = $(`<button class="template-pill">${label}</button>`);
+                btn.on('click', function () {
+                    $('#aiInput').val(label).focus();
+                });
+                templateRow.append(btn);
+            });
+        }
+
+        function resetAIChat() {
+            const chatEl = $('#aiChat');
+            chatEl.empty();
+            addAIMessage(
+                "I can help you analyze facts, generate strategy, and plan court steps for this matter.\n\nChoose a mode above or use one of the prompt templates to get started."
+            );
+        }
+
+        function addAIMessageRow(role, text) {
+            const chatEl = $('#aiChat');
+            const row = $(`<div class="msg-row ${role === 'user' ? 'user' : ''}"></div>`);
+            const bubble = $(`<div class="msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}">${text}</div>`);
+            row.append(bubble);
+            chatEl.append(row);
+            chatEl.scrollTop(chatEl[0].scrollHeight);
+        }
+
+        function addUserAIMessage(text) {
+            addAIMessageRow('user', text);
+        }
+
+        function addAIMessage(text) {
+            addAIMessageRow('assistant', text);
+        }
+
+        function fakeAIReply(mode, message) {
+            const matterLabel = currentMatter ? currentMatter.title : "this matter";
+            if (mode === 'analyze') {
+                return `Preliminary issue analysis for ${matterLabel}:\n\n• You asked: "${message}"\n• Key issues: liability, damages, and any procedural risks.\n• Next step: ask me to highlight missing facts or evidence gaps.`;
+            }
+            if (mode === 'strategy') {
+                return `Draft strategy outline:\n\n1. Theory of the case – frame the narrative clearly and simply.\n2. Themes – reliability, broken promises, and impact.\n3. Anticipated defenses – I can expand each with counterpoints.`;
+            }
+            if (mode === 'court') {
+                return `Court planning roadmap:\n\n• Recommended motions and suggested timing.\n• Align deadlines with the current hearing date.\n• Ask me to generate a witness order or motion checklist next.`;
+            }
+            return `I received your message: "${message}". Switch modes for a more tailored response.`;
+        }
+
+        function sendAIMessage() {
+            const text = $('#aiInput').val().trim();
+            if (!text) return;
+
+            addUserAIMessage(text);
+            $('#aiInput').val('');
+
+            const chatEl = $('#aiChat');
+            const loading = $('<div class="chat-loading">Thinking about that…</div>');
+            chatEl.append(loading);
+            chatEl.scrollTop(chatEl[0].scrollHeight);
+
+            setTimeout(() => {
+                loading.remove();
+                const reply = fakeAIReply(currentAIMode, text);
+                addAIMessage(reply);
+            }, 800);
+        }
+
+        // Mode switching
+        $(document).on('click', '.mode-btn', function () {
+            $('.mode-btn').removeClass('active');
+            $(this).addClass('active');
+            currentAIMode = $(this).data('mode');
+            renderAITemplates();
+
+            const modeName = currentAIMode === 'analyze' ? 'fact analysis' :
+                currentAIMode === 'strategy' ? 'strategy' : 'court planning';
+            addAIMessage(`Switched to ${modeName} mode for this matter.`);
+        });
+
+        // Send AI message
+        $(document).on('click', '#sendAIBtn', sendAIMessage);
+
+        $(document).on('keydown', '#aiInput', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAIMessage();
+            }
+        });
+
+        // Initialize AI when tab is shown
+        $(document).on('shown.bs.tab', 'a[href="#matterAI"]', function () {
+            if ($('#aiChat').children().length === 0) {
+                renderAITemplates();
+                resetAIChat();
+            }
+        });
 
         // Khi load tab Messages
         $(document).on('shown.bs.tab', 'a[href="#clientMessages"]', function () {
@@ -2210,12 +2660,12 @@
             if (!currentClient) return;
 
             const filter = $('#msgFilter').val() || 'all';
-            
+
             // Get messages based on active type
-            const allMsgs = activeMsgType === 'client' 
-                ? (currentClient.messages || []) 
+            const allMsgs = activeMsgType === 'client'
+                ? (currentClient.messages || [])
                 : (currentClient.counselMessages || []);
-            
+
             const msgs = allMsgs;
 
             const filtered = msgs.filter(m => {
@@ -2324,14 +2774,14 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
 
         // ========== MESSAGE ACTIONS ==========
         // Switch between Client and Opposing Counsel messages
-        $(document).on('click', '.msg-type-tab', function() {
+        $(document).on('click', '.msg-type-tab', function () {
             const msgType = $(this).data('msg-type');
             activeMsgType = msgType;
-            
+
             // Update button styles
             $('.msg-type-tab').removeClass('btn-primary').addClass('btn-outline-secondary');
             $(this).removeClass('btn-outline-secondary').addClass('btn-primary');
-            
+
             // Re-render messages
             renderMessages();
         });
@@ -2644,7 +3094,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             const html = Object.entries(documentStructure).map(([folder, subs]) => {
                 const folderId = 'folder' + (++idx);
                 const folderVisible = currentClient?.folderVisibility?.[folder] !== false;
-                
+
                 const subsHtml = Object.entries(subs).map(([sub, files]) => {
                     const safeSub = sub.replace(/[^a-zA-Z0-9_-]/g, '_');
                     const subId = folderId + '-' + safeSub + '-' + Math.floor(Math.random() * 10000);
@@ -2826,7 +3276,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             e.stopPropagation();
             const folder = $(this).data('folder');
             const isVisible = $(this).is(':checked');
-            
+
             if (!currentClient.folderVisibility) currentClient.folderVisibility = {};
             currentClient.folderVisibility[folder] = isVisible;
         });
@@ -2837,7 +3287,7 @@ court clerk has to move our court trial to Nov 24, 2025. Are you ok with this?`}
             const folder = $(this).data('folder');
             const subfolder = $(this).data('subfolder');
             const isVisible = $(this).is(':checked');
-            
+
             if (!currentClient.subfolderVisibility) currentClient.subfolderVisibility = {};
             if (!currentClient.subfolderVisibility[folder]) currentClient.subfolderVisibility[folder] = {};
             currentClient.subfolderVisibility[folder][subfolder] = isVisible;
